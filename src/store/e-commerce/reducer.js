@@ -42,6 +42,7 @@ import {
 const INIT_STATE = {
   products: [],
   product: {},
+  productList: [],
   orders: [],
   cartData: {},
   customers: [],

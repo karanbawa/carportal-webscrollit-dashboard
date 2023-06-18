@@ -149,7 +149,7 @@ export const updateOrder = order => put(url.UPDATE_ORDER, order);
 
 // delete order
 export const deleteOrder = order =>
-  del(url.DELETE_ORDER, { headers: { order } });
+  del(url.DELETE_ORDER, { headers: { order } }); 
 
 // get cart data
 export const getCartData = () => get(url.GET_CART_DATA);

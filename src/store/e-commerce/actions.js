@@ -52,7 +52,16 @@ import {
   ON_ADD_COMMENT_FAIL,
   GET_PRODUCT_LIST,
   GET_PRODUCT_LIST_SUCCESS,
-  GET_PRODUCTS_LIST_FAIL
+  GET_PRODUCTS_LIST_FAIL,
+  ADD_NEW_PRODUCT_IN_LIST,
+  ADD_PRODUCT_IN_LIST_SUCCESS,
+  ADD_PRODUCT_IN_LIST_FAIL,
+  UPDATE_PRODUCT_IN_LIST,
+  UPDATE_PRODUCT_IN_LIST_SUCCESS,
+  UPDATE_PRODUCT_IN_LIST_FAIL,
+  DELETE_PRODUCT_IN_LIST,
+  DELETE_PRODUCT_IN_LIST_SUCCESS,
+  DELETE_PRODUCT_IN_LIST_FAIL
 } from "./actionTypes"
 
 
@@ -81,6 +90,51 @@ export const getProductListSuccess = productList => ({
 
 export const getProductListFail = error => ({
   type: GET_PRODUCTS_LIST_FAIL,
+  payload: error,
+});
+
+export const addNewProductInList = product => ({
+  type: ADD_NEW_PRODUCT_IN_LIST,
+  payload: product,
+});
+
+export const addProductInListSuccess = product => ({
+  type: ADD_PRODUCT_IN_LIST_SUCCESS,
+  payload: product,
+});
+
+export const addProductInListFail = error => ({
+  type: ADD_PRODUCT_IN_LIST_FAIL,
+  payload: error,
+});
+
+export const updateProductInList = product => ({
+  type: UPDATE_PRODUCT_IN_LIST,
+  payload: product,
+});
+
+export const updateProductInListSuccess = product => ({
+  type: UPDATE_PRODUCT_IN_LIST_SUCCESS,
+  payload: product,
+});
+
+export const updateProductInListFail = error => ({
+  type: UPDATE_PRODUCT_IN_LIST_FAIL,
+  payload: error,
+});
+
+export const deleteProductInList = product => ({
+  type: DELETE_PRODUCT_IN_LIST,
+  payload: product,
+});
+
+export const deleteProductInListSuccess = product => ({
+  type: DELETE_PRODUCT_IN_LIST_SUCCESS,
+  payload: product,
+});
+
+export const deleteProductInListFail = error => ({
+  type: DELETE_PRODUCT_IN_LIST_FAIL,
   payload: error,
 });
 

@@ -150,7 +150,6 @@ export default function EcommerceCollectionDetails() {
     (collectionProduct, index, products) => {
         // const prod = products?.find(product => product._id === collectionProduct._id);
         const prod = collectionProduct;
-        console.log('prodID ', prod);
       return (
         <CollectionProductPreview
           key={prod?._id}

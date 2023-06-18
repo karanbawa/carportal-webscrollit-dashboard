@@ -19,6 +19,10 @@ import {
   ON_LIKE_REPLY,
   ON_ADD_REPLY,
   ON_ADD_COMMENT,
+  GET_PRODUCT_LIST,
+  UPDATE_PRODUCT_IN_LIST,
+  DELETE_PRODUCT_IN_LIST,
+  ADD_NEW_PRODUCT_IN_LIST,
 } from "./actionTypes";
 import {
   getCartDataFail,
@@ -55,6 +59,14 @@ import {
   onAddReplyFail,
   onAddCommentSuccess,
   onAddCommentFail,
+  getProductListSuccess,
+  getProductListFail,
+  updateProductInListSuccess,
+  updateProductInListFail,
+  deleteProductInListSuccess,
+  deleteProductInListFail,
+  addProductInListSuccess,
+  addProductInListFail,
 } from "./actions";
 
 //Include Both Helper File with needed methods
@@ -77,6 +89,8 @@ import {
   onAddReply as onAddReplyApi,
   onAddComment as onAddCommentApi,
 } from "helpers/fakebackend_helper";
+import { addNewProductInList, deleteProductInList, getProductList, updateProductInList } from "helpers/backend_helper";
+import { showToastError, showToastSuccess } from "helpers/toastBuilder";
 
 function* fetchProducts() {
   try {
@@ -235,6 +249,45 @@ function* onAddComment({ payload: { productId, commentText } }) {
   }
 }
 
+function* fetchProductList() {
+  try {
+    const response = yield call(getProductList);
+    yield put(getProductListSuccess(response.data.products));
+  } catch (error) {
+    yield put(getProductListFail(error));
+  }
+}
+
+function* onUpdateProductInList({ payload: product }) {
+  try {
+    const response = yield call(updateProductInList, product);
+    yield put(updateProductInListSuccess(product));
+  } catch (error) {
+    yield put(updateProductInListFail(error));
+  }
+}
+
+function* onDeleteProductInList({ payload: product }) {
+  try {
+    console.log('deleteproduct ', product);
+    const response = yield call(deleteProductInList, product);
+    yield put(deleteProductInListSuccess(product));
+    showToastSuccess("Product deleted successfully", "Success");
+  } catch (error) {
+    yield put(deleteProductInListFail(error));
+    showToastError("Product failed to get deleted", "Error");
+  }
+}
+
+function* onAddNewProductInList({ payload: product }) {
+  try {
+    const response = yield call(addNewProductInList, product);
+    yield put(addProductInListSuccess(response));
+  } catch (error) {
+    yield put(addProductInListFail(error));
+  }
+}
+
 function* ecommerceSaga() {
   yield takeEvery(GET_PRODUCTS, fetchProducts);
   yield takeEvery(GET_PRODUCT_DETAIL, fetchProductDetail);
@@ -253,6 +306,10 @@ function* ecommerceSaga() {
   yield takeEvery(ON_LIKE_REPLY, onLikeReply);
   yield takeEvery(ON_ADD_REPLY, onAddReply);
   yield takeEvery(ON_ADD_COMMENT, onAddComment);
+  yield takeEvery(GET_PRODUCT_LIST, fetchProductList);
+  yield takeEvery(UPDATE_PRODUCT_IN_LIST, onUpdateProductInList);
+  yield takeEvery(DELETE_PRODUCT_IN_LIST, onDeleteProductInList);
+  yield takeEvery(ADD_NEW_PRODUCT_IN_LIST, onAddNewProductInList);
 }
 
 export default ecommerceSaga;

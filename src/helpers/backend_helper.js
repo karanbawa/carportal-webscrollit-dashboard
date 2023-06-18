@@ -25,7 +25,23 @@ const deleteCollection = collectionId =>
   del(`${url.DELETE_COLLECTION}${collectionId}`)
 
 // products
-const getProductList = () => get(url.GET_ALL_PRODUCTS_IN_LIST)
+const getProductList = () => get(url.GET_ALL_PRODUCTS_IN_LIST);
+
+export const updateProductInList = product =>
+  put(`${url.UPDATE_PRODUCT_IN_LIST}${product._id}`, {
+    name: product.name,
+    price: product.price,
+    // Change after API is updated
+    // createdAt: product.createdAt,
+    // displayProduct: product.displayProduct,
+    category : product.category
+  });
+
+  export const deleteProductInList = product =>
+  del(`${url.DELETE_PRODUCT_IN_LIST}${product._id}`, { headers: { product } });
+
+  export const addNewProductInList = product =>
+  post(url.ADD_PRODUCT_IN_LIST, product);
 
 
 export {

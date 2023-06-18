@@ -39,8 +39,8 @@ import { useDispatch, useSelector } from "react-redux"
 import FileResizer from "react-image-file-resizer"
 import { CirclePicker, SketchPicker } from "react-color"
 import IconSelector from "./IconSelector"
-import { getProductList } from "store/actions"
 import { addCollection } from "store/collections/action"
+import { getProductList } from "store/actions"
 
 export default function AddCollection() {
   const dispatch = useDispatch()

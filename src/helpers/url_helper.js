@@ -17,4 +17,8 @@ export const DELETE_COLLECTION = "/v1/categories/";
 
 // products
 export const GET_ALL_PRODUCTS_IN_LIST = "/v1/products/submitted/all";
+export const ADD_PRODUCT_IN_LIST = "/v1/products";
+export const GET_ONE_PRODUCT = "/v1/products/id/";
+export const DELETE_PRODUCT_IN_LIST = "/v1/products/id/";
+export const UPDATE_PRODUCT_IN_LIST = "v1/products/id/";
 
