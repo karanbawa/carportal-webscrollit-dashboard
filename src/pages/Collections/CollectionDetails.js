@@ -31,34 +31,28 @@ import {
   ToastHeader,
   ToastBody,
 } from "reactstrap";
-import Dropzone from "react-dropzone";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import CollectionProductPreview from "./CollectionProductPreview";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  deleteCollection,
-  getCollections,
-  getProductList,
-  updateCollection,
-  updateProductInList,
+  getProductList
 } from "store/actions";
 import { useEffect } from "react";
-import { hover } from "@testing-library/user-event/dist/hover";
-import FileResizer from "react-image-file-resizer";
 import { CirclePicker, SketchPicker } from "react-color";
 import IconSelector from "./IconSelector";
+import { getCollections, deleteCollection, updateCollection } from "store/collections/action";
 
 export default function EcommerceCollectionDetails() {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const history = useNavigate();
   const { _id } = useParams();
 
   // Getting collections and products from store
   const { collections, products } = useSelector(state => ({
-    collections: state.ecommerce.collections,
+    collections: state.collection.collections,
     products: state.ecommerce.productList,
   }));
 
@@ -77,7 +71,7 @@ export default function EcommerceCollectionDetails() {
   const [productList, setProductList] = useState([]);
 
   // Getting page specific collection from collections
-  const collection = collections.filter(collection => collection._id === _id)[0];
+  const collection = collections?.filter(collection => collection._id === _id)[0];
 
   // Creating a local set of values that will enable editing
   const [collectionName, setCollectionName] = useState(
@@ -101,14 +95,13 @@ export default function EcommerceCollectionDetails() {
 
   // call APIs if products or collections is empty
   useEffect(() => {
-    if (!products.length) {
+    if (!products?.length) {
       dispatch(getProductList());
     }
   }, [products]);
 
   useEffect(() => {
-    console.log('collections ', collections);
-    if (collections && !collections.length) {
+    if (collections && !collections?.length) {
       dispatch(getCollections());
     }
   }, [collections]);
@@ -116,7 +109,8 @@ export default function EcommerceCollectionDetails() {
   // redirect to collections page if a wrong id is entered in the address bar by the user
   useEffect(() => {
     if (!collection && _id !== "untitled-collection") {
-      history.push("/ecommerce-collections");
+      console.log('datacheck');
+      history("/ecommerce-collections");
     }
   }, [collection, products]);
 
@@ -126,7 +120,7 @@ export default function EcommerceCollectionDetails() {
 
   useEffect(() => {
     setProductsToAdd(
-      products.filter(product => !collectionProductIds?.includes(product._id))
+      products?.filter(product => !collectionProductIds?.includes(product._id))
     );
   }, [collectionProductIds, products]);
 
@@ -154,9 +148,9 @@ export default function EcommerceCollectionDetails() {
   // rendering drag drop product cards
   const renderCollectionProductPreview = useCallback(
     (collectionProduct, index, products) => {
-        const prod = products.find(product => product._id === collectionProduct._id);
-
-        console.log('collectionProduct ', collectionProduct);
+        // const prod = products?.find(product => product._id === collectionProduct._id);
+        const prod = collectionProduct;
+        console.log('prodID ', prod);
       return (
         <CollectionProductPreview
           key={prod?._id}
@@ -217,21 +211,21 @@ export default function EcommerceCollectionDetails() {
     setCollectionImageUrl(undefined);
   };
 
-  if (!productList.length) {
-    return (
-      <React.Fragment>
-        <div className="page-content">
-          <Spinner
-            style={{
-              position: "absolute",
-              left: "50%",
-              top: "50%",
-            }}
-          />
-        </div>
-      </React.Fragment>
-    );
-  } else {
+  // if (!productList?.length) {
+  //   return (
+  //     <React.Fragment>
+  //       <div className="page-content">
+  //         <Spinner
+  //           style={{
+  //             position: "absolute",
+  //             left: "50%",
+  //             top: "50%",
+  //           }}
+  //         />
+  //       </div>
+  //     </React.Fragment>
+  //   );
+  // } else {
     return (
       <React.Fragment>
         <div className="page-content">
@@ -391,7 +385,6 @@ export default function EcommerceCollectionDetails() {
                           }}
                           type="file"
                         />
-                        {console.log('collectionImageUrl ', collectionImageUrl)}
                         {collectionImageUrl && (<div style={{ position: "relative" }}> <img src={collectionImageUrl} style={{ maxWidth: "300px", maxHeight: "300px" }} /> 
                         <button
                           style={{ position: "absolute", top: 0, right: 0 }}
@@ -507,7 +500,7 @@ export default function EcommerceCollectionDetails() {
                 color="danger"
                 onClick={() => {
                   toggle();
-                  history.push("/ecommerce-collections");
+                  history("/ecommerce-collections");
                 }}
               >
                 Discard Changes
@@ -518,7 +511,7 @@ export default function EcommerceCollectionDetails() {
             <ModalHeader toggle={toggle1}>Add Products</ModalHeader>
             <ModalBody style={{ overflowY: "scroll" }}>
               <ListGroup style={{ maxHeight: "50vh" }}>
-                {productsToAdd.map(product => (
+                {productsToAdd?.map(product => (
                   <ListGroupItem
                     onClick={() => {
                       setCollectionProductIds([
@@ -558,7 +551,7 @@ export default function EcommerceCollectionDetails() {
                   </ListGroupItem>
                 ))}
               </ListGroup>
-              {productsToAdd.length ? null : (
+              {productsToAdd?.length ? null : (
                 <Row>
                   <Col className="text-sm-center">
                     This category includes all of the available products.
@@ -601,5 +594,5 @@ export default function EcommerceCollectionDetails() {
         </div>
       </React.Fragment>
     );
-  }
+  // }
 }

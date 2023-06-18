@@ -49,7 +49,10 @@ import {
   ON_ADD_REPLY_FAIL,
   ON_ADD_COMMENT,
   ON_ADD_COMMENT_SUCCESS,
-  ON_ADD_COMMENT_FAIL
+  ON_ADD_COMMENT_FAIL,
+  GET_PRODUCT_LIST,
+  GET_PRODUCT_LIST_SUCCESS,
+  GET_PRODUCTS_LIST_FAIL
 } from "./actionTypes"
 
 
@@ -66,6 +69,20 @@ export const getProductsFail = error => ({
   type: GET_PRODUCTS_FAIL,
   payload: error,
 })
+
+export const getProductList = () => ({
+  type: GET_PRODUCT_LIST,
+});
+
+export const getProductListSuccess = productList => ({
+  type: GET_PRODUCT_LIST_SUCCESS,
+  payload: productList,
+});
+
+export const getProductListFail = error => ({
+  type: GET_PRODUCTS_LIST_FAIL,
+  payload: error,
+});
 
 export const getProductDetail = productId => ({
   type: GET_PRODUCT_DETAIL,

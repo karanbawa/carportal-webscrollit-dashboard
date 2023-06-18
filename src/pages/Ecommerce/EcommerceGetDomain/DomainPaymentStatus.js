@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
-import { Link, useParams, useHistory, useLocation } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { Card, CardBody, Container, Row, Button } from "reactstrap";
 
 const DomainPaymentStatus = () => {
   const { id } = useParams();
-  const history = useHistory();
+  const history = useNavigate();
   const location = useLocation();
   const { siteData } = location.state;
 
   useEffect(() => {
     if (id.toString() !== "success") {
       setTimeout(() => {
-        history.push({
+        history({
           pathname: `/ecommerce-buy-domain-name=${siteData?.domain}`,
           state: { siteData },
         });

@@ -31,19 +31,20 @@ import {
   ToastBody,
   Spinner,
 } from "reactstrap"
-import { Link, useHistory } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { DndProvider } from "react-dnd"
 import CollectionProductPreview from "./CollectionProductPreview"
 import { useDispatch, useSelector } from "react-redux"
-import { addCollection, getProductList } from "store/actions"
 import FileResizer from "react-image-file-resizer"
 import { CirclePicker, SketchPicker } from "react-color"
 import IconSelector from "./IconSelector"
+import { getProductList } from "store/actions"
+import { addCollection } from "store/collections/action"
 
 export default function AddCollection() {
   const dispatch = useDispatch()
-  const history = useHistory()
+  const history = useNavigate()
 
   // Getting collections and products from store
   const { products } = useSelector(state => ({
@@ -81,7 +82,7 @@ export default function AddCollection() {
 
   useEffect(() => {
     setProductsToAdd(
-      products.filter(product => !collectionProductIds.includes(product._id))
+      products?.filter(product => !collectionProductIds.includes(product._id))
     )
   }, [collectionProductIds, products])
 
@@ -265,7 +266,7 @@ export default function AddCollection() {
                     <DndProvider backend={HTML5Backend}>
                       <Row>
                         <CardGroup>
-                          {collectionProductIds.map(
+                          {collectionProductIds?.map(
                             (CollectionProductId, index) =>
                               renderCollectionProductPreview(
                                 CollectionProductId,
@@ -433,7 +434,7 @@ export default function AddCollection() {
                 color="danger"
                 onClick={() => {
                   toggle()
-                  history.push("/ecommerce-collections")
+                  history("/ecommerce-collections")
                 }}
               >
                 Discard Changes
@@ -444,7 +445,7 @@ export default function AddCollection() {
             <ModalHeader toggle={toggle1}>Add Products</ModalHeader>
             <ModalBody style={{ overflowY: "scroll" }}>
               <ListGroup style={{ maxHeight: "50vh" }}>
-                {productsToAdd.map(product => (
+                {productsToAdd?.map(product => (
                   <ListGroupItem
                     onClick={() => {
                       setCollectionProductIds([
@@ -480,7 +481,7 @@ export default function AddCollection() {
                   </ListGroupItem>
                 ))}
               </ListGroup>
-              {productsToAdd.length ? null : (
+              {productsToAdd?.length ? null : (
                 <Row>
                   <Col className="text-sm-center">
                     This category includes all of the available products.

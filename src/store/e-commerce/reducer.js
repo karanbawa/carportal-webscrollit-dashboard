@@ -29,6 +29,14 @@ import {
   ON_LIKE_REPLY_SUCCESS,
   ON_ADD_REPLY_SUCCESS,
   ON_ADD_COMMENT_SUCCESS,
+  GET_PRODUCT_LIST_SUCCESS,
+  GET_PRODUCTS_LIST_FAIL,
+  ADD_PRODUCT_IN_LIST_SUCCESS,
+  ADD_PRODUCT_IN_LIST_FAIL,
+  UPDATE_PRODUCT_IN_LIST_SUCCESS,
+  UPDATE_PRODUCT_IN_LIST_FAIL,
+  DELETE_PRODUCT_IN_LIST_SUCCESS,
+  DELETE_PRODUCT_IN_LIST_FAIL,
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -67,7 +75,58 @@ const Ecommerce = (state = INIT_STATE, action) => {
         ...state,
         error: action.payload,
       };
+    case GET_PRODUCT_LIST_SUCCESS:
+      return {
+        ...state,
+        productList: action.payload,
+      };
 
+    case GET_PRODUCTS_LIST_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case ADD_PRODUCT_IN_LIST_SUCCESS:
+      return {
+        ...state,
+        productList: [...state.productList, action.payload],
+      };
+
+    case ADD_PRODUCT_IN_LIST_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
+    case UPDATE_PRODUCT_IN_LIST_SUCCESS:
+      return {
+        ...state,
+        productList: state.productList.map(product =>
+          product._id === action.payload._id.toString()
+            ? { product, ...action.payload }
+            : product
+        ),
+      };
+
+    case UPDATE_PRODUCT_IN_LIST_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
+    case DELETE_PRODUCT_IN_LIST_SUCCESS:
+      return {
+        ...state,
+        productList: state.productList.filter(
+          product => product._id.toString() !== action.payload._id.toString()
+        ),
+      };
+
+    case DELETE_PRODUCT_IN_LIST_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
     case GET_ORDERS_SUCCESS:
       return {
         ...state,

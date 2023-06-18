@@ -161,13 +161,21 @@ import Pages500 from "../pages/Utility/pages-500";
 import ContactsGrid from "../pages/Contacts/contacts-grid";
 import ContactsList from "../pages/Contacts/ContactList/contacts-list";
 import ContactsProfile from "../pages/Contacts/ContactsProfile/contacts-profile";
-import EcommerceCollections from "pages/Collections";
+import EcommerceCollections from "../pages/Collections/index";
+import AddCollection from "pages/Collections/AddCollection";
+import EcommerceCollectionDetails from "pages/Collections/CollectionDetails";
+import EcommerceProductList from "pages/Ecommerce/EcommerceProductList";
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   // { path: "/ecommerce-get-domain", component: EcommerceGetDomain },
-  { path: "/ecommerce-collections", component: EcommerceCollections },
-
+  { path: "/ecommerce-collections", component: <EcommerceCollections /> },
+  { path: "/ecommerce-create-collection", component: <AddCollection /> },
+  {
+    path: "/ecommerce-collection-details/:_id",
+    component: <EcommerceCollectionDetails />,
+  },
+  { path: "/ecommerce-product-list", component: <EcommerceProductList /> },
 
 
 

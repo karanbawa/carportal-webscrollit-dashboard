@@ -59,7 +59,7 @@ function* onUpdateCollection({ payload: { collection, history } }) {
     history("/ecommerce-collections");
   } catch (error) {
     yield put(updateCollectionFail(error));
-    showToastError("Sorry! Failed to update the collection", "error");
+    showToastError("Sorry! Failed to update the collection", "Error");
     history("/ecommerce-collections");
   }
 }
@@ -73,7 +73,7 @@ function* onDeleteCollection({ payload: { collectionId, history } }) {
   } catch (error) {
     yield put(deleteCollectionFail(error));
     history("/ecommerce-collections");
-    showToastError("Sorry! Failed to delete the collection", "error");
+    showToastError("Sorry! Failed to delete the collection", "Error");
   }
 }
 
@@ -82,21 +82,22 @@ function* onAddCollection({ payload: { collection, history } }) {
     const config = {
       headers: { "content-type": "multipart/form-data" },
     };
+    console.log('onAddCollectyioncalled ', collection, history);
     const response = yield call(addCollection, collection, config);
     yield put(addCollectionSuccess(response));
     showToastSuccess("Collection Added successfully", "Success");
     history("/ecommerce-collections");
   } catch (error) {
     yield put(addCollectionFail(error));
-    showToastError("Sorry! Failed to Add the collection", "error");
+    showToastError("Sorry! Failed to Add the collection", "Error");
   }
 }
 
-function* ecommerceSaga() {
+function* collectionSaga() {
   yield takeEvery(ADD_COLLECTION, onAddCollection);
   yield takeEvery(GET_COLLECTIONS, fetchCollections);
   yield takeEvery(UPDATE_COLLECTION, onUpdateCollection);
   yield takeEvery(DELETE_COLLECTION, onDeleteCollection);
 }
 
-export default ecommerceSaga;
+export default collectionSaga;

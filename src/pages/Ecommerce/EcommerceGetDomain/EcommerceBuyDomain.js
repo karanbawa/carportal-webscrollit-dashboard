@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, Redirect, useLocation, useHistory } from "react-router-dom";
+import { Link, Redirect, useLocation, useNavigate } from "react-router-dom";
 
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -30,7 +30,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 const EcommerceBuyDomain = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const history = useNavigate();
   const location = useLocation();
   const { siteData } = location.state;
 
@@ -143,7 +143,7 @@ const EcommerceBuyDomain = () => {
     if (domainPayment && Object.keys(domainPayment).length) {
       //more payment status condition need to be added
       if (domainPayment?.statusCode.toString() === "10001") {
-        return history.push({
+        return history({
           pathname: "/ecomm-Domain-paymentStatus/fail",
           state: { siteData },
         });

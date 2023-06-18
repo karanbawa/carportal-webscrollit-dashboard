@@ -1,5 +1,5 @@
 import axios from "axios";
-import { del, get, post, put } from "./api_helper";
+import { del, get, post, postFormData, put, putFormData } from "./api_helper";
 import * as url from "./url_helper";
 
 // Register Method
@@ -25,7 +25,7 @@ const deleteCollection = collectionId =>
   del(`${url.DELETE_COLLECTION}${collectionId}`)
 
 // products
-export const getProductList = () => get(url.GET_ALL_PRODUCTS_IN_LIST)
+const getProductList = () => get(url.GET_ALL_PRODUCTS_IN_LIST)
 
 
 export {
@@ -37,5 +37,6 @@ export {
   getCollections,
   addCollection,
   updateCollection,
-  deleteCollection
+  deleteCollection,
+  getProductList
 };
