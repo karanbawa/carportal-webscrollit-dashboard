@@ -6,7 +6,7 @@ import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+// import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 
 import Breadcrumbs from "components/Common/Breadcrumb";
@@ -65,7 +65,7 @@ const BroughtDomain = () => {
             <Col>
               <Card>
                 <CardBody>
-                  <PaginationProvider
+                  {/* <PaginationProvider
                     pagination={paginationFactory(pageOptions)}
                     keyField="_id"
                     columns={invoiceColumns}
@@ -85,7 +85,7 @@ const BroughtDomain = () => {
                               <Col sm="4">
                                 <div className="search-box me-2 mb-2 d-inline-block">
                                   <div className="position-relative">
-                                    <SearchBar {...toolkitProps.searchProps} />
+                                    <SearchBar {...toolkitProps?.searchProps} />
                                     <i className="bx bx-search-alt search-icon" />
                                   </div>
                                 </div>
@@ -121,7 +121,7 @@ const BroughtDomain = () => {
                         )}
                       </ToolkitProvider>
                     )}
-                  </PaginationProvider>
+                  </PaginationProvider> */}
                 </CardBody>
               </Card>
             </Col>

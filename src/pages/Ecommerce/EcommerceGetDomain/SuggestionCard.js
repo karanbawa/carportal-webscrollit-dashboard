@@ -22,7 +22,7 @@ const suggestionCard = ({ siteName, siteData }) => {
             </CardText>
             <Link
               to={{
-                pathname: `/ecommerce-buy-domain-name=${siteName}`,
+                pathname: `/ecommerce-buy-domain-name/${siteName}`,
                 state: { siteData: siteData },
               }}
             >

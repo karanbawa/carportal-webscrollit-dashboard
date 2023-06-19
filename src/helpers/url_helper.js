@@ -22,3 +22,24 @@ export const GET_ONE_PRODUCT = "/v1/products/id/";
 export const DELETE_PRODUCT_IN_LIST = "/v1/products/id/";
 export const UPDATE_PRODUCT_IN_LIST = "v1/products/id/";
 
+//domain
+export const DOMAIN_SUGGESTION = "v1/godaddy/suggest-domains?keyword";
+export const DOMAIN_AVAILABILITY = "v1/godaddy/check-domain?domain=";
+export const BUY_DOMAIN = "v1/godaddy/purchase-domain";
+
+export const DOMAIN_ORDERID = "v1/godaddy/razorpay/orders";
+
+//ORDERS
+export const GET_ORDERS = "/v1/orders";
+export const ADD_NEW_ORDER = "/v1/orders";
+export const UPDATE_ORDER = "/v1/orders/";
+export const DELETE_ORDER = "/v1/orders/";
+export const DELETE_ALL_ORDER = "/v1/orders/delete/all";
+
+//CUSTOMERS
+export const GET_CUSTOMERS = "/v1/customer/importcustomers";
+export const ADD_NEW_CUSTOMER = "/v1/customer/add";
+export const UPDATE_CUSTOMER = "/v1/customer/update/";
+export const DELETE_CUSTOMER = "/v1/customer/delete/";
+export const DELETE_ALL_CUSTOMERS = "/v1/customer/deleteall";
+export const IMPORT_CUSTOMERS = "/v1/customer/importcustomers";

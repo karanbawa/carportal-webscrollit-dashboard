@@ -8,7 +8,7 @@ import {
   domainOrderId as fetchDomainOrderId,
   buyDomain,
   domainPaymentCleanup,
-} from "store/actions";
+} from "../../../store/domain/action";
 
 import {
   Card,
@@ -32,11 +32,11 @@ const EcommerceBuyDomain = () => {
   const dispatch = useDispatch();
   const history = useNavigate();
   const location = useLocation();
-  const { siteData } = location.state;
+  const { siteData } = location.state ?? [''];
 
   const { domainOrderId, domainPayment } = useSelector(state => ({
-    domainOrderId: state.ecommerce.domainOrderId,
-    domainPayment: state.ecommerce.domainPayment,
+    domainOrderId: state.domain.domainOrderId,
+    domainPayment: state.domain.domainPayment,
   }));
 
   const [orderId, setOrderId] = useState("");

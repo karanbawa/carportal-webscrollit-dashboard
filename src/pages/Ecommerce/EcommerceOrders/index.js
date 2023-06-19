@@ -16,7 +16,11 @@ import {
   addNewOrder as onAddNewOrder,
   updateOrder as onUpdateOrder,
   deleteOrder as onDeleteOrder,
-} from "store/actions";
+  getProductList as getProductListdata,
+  deleteAllOrders as ondeleteAllOrders,
+  getCustomers,
+  addNewCustomer
+} from "../../../store/e-commerce/actions";
 
 import {
   OrderId,
@@ -54,11 +58,20 @@ function EcommerceOrder() {
   document.title = "Orders | Scrollit";
 
   const [modal, setModal] = useState(false);
+  const [nestedModal, setNestedModal] = useState(false);
   const [modal1, setModal1] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
   const [orderList, setOrderList] = useState([]);
   const [order, setOrder] = useState(null);
+  const [productList, setProductList] = useState([]);
+  const [customerList, setCustomerList] = useState([]);
+  const [productOptions, setProductOptions] = useState([]);
+  const [customerRef, setCustomerRef] = useState([]);
+  const [productRef, setProductRef] = useState([]);
+  const [orderData, setOrderData] = useState({});
+  const [closeAll, setCloseAll] = useState(false);
+  const dispatch = useDispatch();
 
   // validation
   const validation = useFormik({
@@ -66,70 +79,146 @@ function EcommerceOrder() {
     enableReinitialize: true,
 
     initialValues: {
-      orderId: (order && order.orderId) || '',
-      billingName: (order && order.billingName) || '',
-      orderdate: (order && order.orderdate) || '',
-      total: (order && order.total) || '',
-      paymentStatus: (order && order.paymentStatus) || 'Paid',
-      badgeclass: (order && order.badgeclass) || 'success',
-      paymentMethod: (order && order.paymentMethod) || 'Mastercard',
+      orderItems: (order && order.orderItems) || [],
+      billingName:
+        (order && {
+          value: order.customerId._id,
+          label: order.customerId.username,
+        }) ||
+        {},
+      shippingAddress1: (order && order.shippingAddress1) || "",
+      shippingAddress2: (order && order.shippingAddress2) || "",
+      paymentStatus: (order && order.paymentStatus) || "Paid",
+      badgeclass: (order && order.badgeclass) || "success",
+      paymentMethod: (order && order.paymentMethod) || "Mastercard",
+      city: (order && order.city) || "",
+      state: (order && order.state) || "",
+      country: (order && order.country) || "",
+      phone: (order && order.phone) || "",
+      zip: (order && order.zip) || "",
+      methodIcon: (order && order.methodIcon) || "fa-cc-mastercard",
     },
     validationSchema: Yup.object({
-      orderId: Yup.string()
-        .matches(
-          /[0-9\.\-\s+\/()]+/,
-          "Please Enter Valid Order Id"
-        ).required("Please Enter Your Order Id"),
-      billingName: Yup.string().required("Please Enter Your Billing Name"),
-      orderdate: Yup.string().required("Please Enter Your Order Date"),
-      total: Yup.string().matches(
-        /[0-9\.\-\s+\/()]+/,
-        "Please Enter Valid Amount"
-      ).required("Total Amount"),
+      billingName: Yup.object().shape({
+        value: Yup.string().required("Please select a customer"),
+        label: Yup.string().required("Please select a customer"),
+      }),
+      shippingAddress1: Yup.string().required(
+        "Please Enter Your shipping address 1"
+      ),
+      shippingAddress2: Yup.string().required(
+        "Please Enter Your shipping address 2"
+      ),
       paymentStatus: Yup.string().required("Please Enter Your Payment Status"),
       badgeclass: Yup.string().required("Please Enter Your Badge Class"),
       paymentMethod: Yup.string().required("Please Enter Your Payment Method"),
+      city: Yup.string().required("Please Enter Your city"),
+      state: Yup.string().required("Please Enter Your state"),
+      country: Yup.string().required("Please Enter Your country"),
+      phone: Yup.string().required("Please Enter Your phone"),
+      zip: Yup.string().required("Please Enter Your zip"),
+      methodIcon: Yup.string().required("Please Enter Your methodIcon "),
+      orderItems: Yup.array()
+        .of(
+          Yup.object().shape({
+            quantity: Yup.number().required("Please enter product quantity"),
+            product: Yup.object().shape({
+              _id: Yup.string().required("Please select a product"),
+            }),
+          })
+        )
+        .min(1, "Please select atleast one product")
+        .required("Please select atleast one product."),
     }),
-    onSubmit: (values) => {
+    onSubmit: values => {
       if (isEdit) {
         const updateOrder = {
-          id: order ? order.id : 0,
-          orderId: values.orderId,
-          billingName: values.billingName,
-          orderdate: values.orderdate,
-          total: values.total,
+          ...order,
+          customerId: values.billingName,
+          shippingAddress1: values.shippingAddress1,
+          shippingAddress2: values.shippingAddress2,
           paymentStatus: values.paymentStatus,
           paymentMethod: values.paymentMethod,
           badgeclass: values.badgeclass,
+          city: values.city,
+          state: values.state,
+          country: values.country,
+          phone: values.phone,
+          zip: values.zip,
+          methodIcon: values.methodIcon,
+          orderItems: values.orderItems,
         };
-        // update order
         dispatch(onUpdateOrder(updateOrder));
+
         validation.resetForm();
       } else {
         const newOrder = {
-          id: Math.floor(Math.random() * (30 - 20)) + 20,
-          orderId: values["orderId"],
-          billingName: values["billingName"],
-          orderdate: values["orderdate"],
-          total: values["total"],
+          orderItems: values["orderItems"],
+          customerId: values["billingName"].value,
+          shippingAddress1: values["shippingAddress1"],
+          shippingAddress2: values["shippingAddress2"],
           paymentStatus: values["paymentStatus"],
           paymentMethod: values["paymentMethod"],
           badgeclass: values["badgeclass"],
+          city: values["city"],
+          state: values["state"],
+          country: values["country"],
+          methodIcon: "fa-cc-mastercard",
+          phone: values["phone"],
+          zip: values["zip"],
         };
-        // save new order
         dispatch(onAddNewOrder(newOrder));
         validation.resetForm();
       }
       toggle();
     },
+    handleError: e => {},
   });
 
+  const validation2 = useFormik({
+    // enableReinitialize : use this flag when initial values needs to be changed
+    enableReinitialize: true,
+
+    initialValues: {
+      username: "",
+      phone: "",
+      email: "",
+      address: "",
+      rating: "",
+      walletBalance: "",
+      joiningDate: "",
+    },
+    validationSchema: Yup.object({
+      username: Yup.string().required("Please Enter Your Name"),
+      phone: Yup.string().required("Please Enter Your Phone"),
+      email: Yup.string().required("Please Enter Your Email"),
+      address: Yup.string().required("Please Enter Your Address"),
+      rating: Yup.string().required("Please Enter Your Rating"),
+      walletBalance: Yup.string().required("Please Enter Your Wallet Balance"),
+      joiningDate: Yup.string().required("Please Enter Your Joining Date"),
+    }),
+    onSubmit: values => {
+      const newCustomer = {
+        username: values["username"],
+        phone: values["phone"],
+        email: values["email"],
+        address: values["address"],
+        rating: values["rating"],
+        walletBalance: values["walletBalance"],
+        joiningDate: values["joiningDate"],
+      };
+      dispatch(addNewCustomer(newCustomer));
+      validation2.resetForm();
+      toggleNested();
+    },
+  });
 
   const toggleViewModal = () => setModal1(!modal1);
 
-  const dispatch = useDispatch();
-  const { orders } = useSelector(state => ({
+  const { orders, products, customers } = useSelector(state => ({
     orders: state.ecommerce.orders,
+    products: state.ecommerce.productList,
+    customers: state.ecommerce.customers,
   }));
 
   useEffect(() => {
@@ -139,8 +228,55 @@ function EcommerceOrder() {
   }, [dispatch, orders]);
 
   useEffect(() => {
+    if (customers && !customers.length) {
+      dispatch(getCustomers());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (products && !products.length) {
+      dispatch(getProductListdata());
+    }
+  }, []);
+
+  useEffect(() => {
     setOrderList(orders);
   }, [orders]);
+
+  useEffect(() => {
+    setProductList(products);
+    setProductOptions(
+      products
+        .filter(product =>
+          validation.values.orderItems.every(
+            entry => entry.product._id !== product._id
+          )
+        )
+        .map(product => ({ value: product._id, label: product.name }))
+    );
+    let test = {};
+    products.forEach(product => {
+      test = { ...test, [product._id]: product.name };
+    });
+    setProductRef(test);
+  }, [products, validation.values]);
+
+  useEffect(() => {
+    setCustomerList(
+      customers.map(customer => ({
+        id: customer._id,
+        key: customer._id,
+        value: customer._id,
+        label: customer.username,
+      }))
+    );
+
+    let test = {};
+    customers.forEach(customer => {
+      test = { ...test, [customer._id]: customer.username };
+    });
+    setCustomerRef(test);
+  }, [customers]);
 
   useEffect(() => {
     if (!isEmpty(orders) && !!isEdit) {
@@ -179,6 +315,16 @@ function EcommerceOrder() {
   //delete order
   const [deleteModal, setDeleteModal] = useState(false);
 
+  const toggleNested = () => {
+    setNestedModal(!nestedModal);
+    setCloseAll(false);
+  };
+
+  const toggleAll = () => {
+    setNestedModal(!nestedModal);
+    setCloseAll(true);
+  };
+
   const onClickDelete = (order) => {
     setOrder(order);
     setDeleteModal(true);
@@ -215,15 +361,15 @@ function EcommerceOrder() {
       },
       {
         Header: 'Billing Name',
-        accessor: 'billingName',
+        accessor: 'customerId',
         filterable: true,
         Cell: (cellProps) => {
           return <BillingName {...cellProps} />;
         }
       },
       {
-        Header: 'Date',
-        accessor: 'orderdate',
+        Header: 'Address',
+        accessor: 'shippingAddress1',
         filterable: true,
         Cell: (cellProps) => {
           return <Date {...cellProps} />;

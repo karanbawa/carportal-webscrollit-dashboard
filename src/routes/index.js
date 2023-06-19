@@ -165,10 +165,20 @@ import EcommerceCollections from "../pages/Collections/index";
 import AddCollection from "pages/Collections/AddCollection";
 import EcommerceCollectionDetails from "pages/Collections/CollectionDetails";
 import EcommerceProductList from "pages/Ecommerce/EcommerceProductList";
+import EcommerceGetDomain from "pages/Ecommerce/EcommerceGetDomain";
+import EcommerceBuyDomain from "pages/Ecommerce/EcommerceGetDomain/EcommerceBuyDomain";
+import DomainPaymentStatus from "pages/Ecommerce/EcommerceGetDomain/DomainPaymentStatus";
+import BroughtDomain from "pages/Ecommerce/EcommerceGetDomain/BroughtDomain";
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
-  // { path: "/ecommerce-get-domain", component: EcommerceGetDomain },
+
+  // domain
+  { path: "/ecommerce-get-domain", component: <EcommerceGetDomain /> },
+  { path: "/ecommerce-buy-domain-name/:id", component: <EcommerceBuyDomain /> },
+  { path: "/ecomm-Domain-paymentStatus/:id", component: <DomainPaymentStatus /> },
+  { path: "/ecommerce-your-domains", component: <BroughtDomain /> },
+
   { path: "/ecommerce-collections", component: <EcommerceCollections /> },
   { path: "/ecommerce-create-collection", component: <AddCollection /> },
   {
@@ -176,7 +186,6 @@ const authProtectedRoutes = [
     component: <EcommerceCollectionDetails />,
   },
   { path: "/ecommerce-product-list", component: <EcommerceProductList /> },
-
 
 
   { path: "/dashboard-saas", component: <DashboardSaas /> },

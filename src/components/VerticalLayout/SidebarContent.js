@@ -194,7 +194,6 @@ const SidebarContent = props => {
                 <span>{props.t("File Manager")}</span>
               </Link>
             </li>
-
             <li>
               <Link to="/#" className="has-arrow">
                 <i className="bx bx-store"></i>
@@ -209,6 +208,11 @@ const SidebarContent = props => {
                 <li>
                   <Link to="/ecommerce-product-list">
                     {props.t("Product List")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/ecommerce-get-domain">
+                    {props.t("Domains")}
                   </Link>
                 </li>
                 <li>

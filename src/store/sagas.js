@@ -22,6 +22,7 @@ import dashboardCryptoSaga from "./dashboard-crypto/saga";
 import dashboardBlogSaga from "./dashboard-blog/saga";
 import dashboardJobSaga from "./dashboard-jobs/saga";
 import collectionSaga from "./collections/saga";
+import domainSaga from "./domain/saga";
 
 export default function* rootSaga() {
   yield all([
@@ -46,6 +47,7 @@ export default function* rootSaga() {
     fork(dashboardSaasSaga),
     fork(dashboardCryptoSaga),
     fork(dashboardBlogSaga),
-    fork(dashboardJobSaga)
+    fork(dashboardJobSaga),
+    fork(domainSaga)
   ]);
 }

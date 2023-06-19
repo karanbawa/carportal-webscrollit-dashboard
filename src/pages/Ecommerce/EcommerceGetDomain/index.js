@@ -16,7 +16,7 @@ import {
   domainAvailability as onDomainAvailability,
   domainSuggestion as onDomainSuggestion,
   domainCleanup,
-} from "store/actions";
+} from "../../../store/domain/action";
 
 import SuggestionCard from "./SuggestionCard.js";
 import Breadcrumbs from "components/Common/Breadcrumb";
@@ -25,8 +25,8 @@ const EcommerceGetDomain = () => {
   const dispatch = useDispatch();
 
   const { domainAvailability, domainSuggestion } = useSelector(state => ({
-    domainAvailability: state.ecommerce.domainAvailability,
-    domainSuggestion: state.ecommerce.domainSuggestion,
+    domainAvailability: state.domain.domainAvailability,
+    domainSuggestion: state.domain.domainSuggestion,
   }));
 
   const [input, setInput] = useState("");
@@ -186,7 +186,7 @@ const EcommerceGetDomain = () => {
                       </div>
                       <Link
                         to={{
-                          pathname: `/ecommerce-buy-domain-name=${domainAvailability?.data?.domain}`,
+                          pathname: `/ecommerce-buy-domain-name/${domainAvailability?.data?.domain}`,
                           state: { siteData: domainAvailability?.data },
                         }}
                       >

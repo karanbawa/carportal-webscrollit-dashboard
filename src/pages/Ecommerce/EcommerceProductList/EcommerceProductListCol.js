@@ -21,7 +21,6 @@ const OrderId = (cell) => {
 };
 
 const ProductName = (cell) => {
-    console.log('celldata', cell);
     return cell.value ? cell.value : '';
 };
 

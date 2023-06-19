@@ -12,7 +12,7 @@ const DomainPaymentStatus = () => {
     if (id.toString() !== "success") {
       setTimeout(() => {
         history({
-          pathname: `/ecommerce-buy-domain-name=${siteData?.domain}`,
+          pathname: `/ecommerce-buy-domain-name/${siteData?.domain}`,
           state: { siteData },
         });
       }, 5000);

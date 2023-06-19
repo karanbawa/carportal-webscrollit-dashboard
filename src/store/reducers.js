@@ -57,6 +57,8 @@ import DashboardBlog from "./dashboard-blog/reducer";
 //Dasboard job
 import DashboardJob from "./dashboard-jobs/reducer";
 
+import domain from "./domain/reducer";
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -79,7 +81,8 @@ const rootReducer = combineReducers({
   DashboardSaas,
   DashboardCrypto,
   DashboardBlog,
-  DashboardJob
+  DashboardJob,
+  domain
 });
 
 export default rootReducer;
