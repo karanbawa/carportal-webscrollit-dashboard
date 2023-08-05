@@ -49,6 +49,7 @@ const INIT_STATE = {
   shops: [],
   error: {},
   productComments: [],
+  customerOrder: {},
 };
 
 const Ecommerce = (state = INIT_STATE, action) => {
@@ -172,7 +173,7 @@ const Ecommerce = (state = INIT_STATE, action) => {
       return {
         ...state,
         orders: state.orders.filter(
-          order => order.id !== action.payload
+          order => order._id !== action.payload
         ),
       };
 

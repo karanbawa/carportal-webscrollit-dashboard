@@ -48,10 +48,10 @@ import {
   CardBody,
 } from "reactstrap";
 
-function EcommerceProductList() {
+function EcommerceProductList() { 
 
   //meta title
-  document.title = "Orders | Scrollit";
+  document.title = "Product List | Scrollit";
 
   const history = useNavigate();
 
@@ -110,7 +110,7 @@ function EcommerceProductList() {
     if (products && !products?.length) {
       dispatch(getProductList())
     }
-  }, [dispatch, products]);
+  }, [dispatch]);
 
   useEffect(() => {
     setProductList(products);
@@ -223,7 +223,8 @@ function EcommerceProductList() {
               onClick={toggleViewModal}
             >
               View Details
-            </Button>);
+            </Button>
+            );
         }
       },
       {

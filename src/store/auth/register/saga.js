@@ -20,7 +20,7 @@ function* registerUser({ payload: { user } }) {
 
     yield put(registerUserSuccessful(response))
   } catch (error) {
-    showToastError('Sorry! Failed to register, plese try again', 'error');
+    showToastError('Sorry! Failed to register, plese try again', 'Error');
     yield put(registerUserFailed(error))
   }
 }

@@ -1,5 +1,5 @@
 import axios from "axios";
-// import accessToken from "./jwt-token-access/accessToken";
+import accessToken from "./jwt-token-access/accessToken";
 import apiKey from "./jwt-token-access/apiKey";
 
 //pass new generated access token here
@@ -15,8 +15,12 @@ export const axiosApi = axios.create({
 });
 axiosApi.defaults.headers.common["x-api-key"] = apiKeys;
 
+// function authUserItem() {
+//   axiosApi.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(localStorage.getItem('authUser'))?.data?.tokens?.accessToken}`;
+// }
+
 function authUserItem() {
-  axiosApi.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(localStorage.getItem('authUser'))?.data?.tokens?.accessToken}`;
+  axiosApi.defaults.headers.common["Authorization"] = accessToken;
 }
 
 axiosApi.interceptors.response.use(

@@ -169,6 +169,7 @@ import EcommerceGetDomain from "pages/Ecommerce/EcommerceGetDomain";
 import EcommerceBuyDomain from "pages/Ecommerce/EcommerceGetDomain/EcommerceBuyDomain";
 import DomainPaymentStatus from "pages/Ecommerce/EcommerceGetDomain/DomainPaymentStatus";
 import BroughtDomain from "pages/Ecommerce/EcommerceGetDomain/BroughtDomain";
+import EcommerceCustomerDetail from "pages/Ecommerce/EcommerceOrders/EcommerceCustomerDetail";
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -186,6 +187,11 @@ const authProtectedRoutes = [
     component: <EcommerceCollectionDetails />,
   },
   { path: "/ecommerce-product-list", component: <EcommerceProductList /> },
+
+  {
+    path: "/ecommerce-customer-detail/:id",
+    component: <EcommerceCustomerDetail />,
+  },
 
 
   { path: "/dashboard-saas", component: <DashboardSaas /> },

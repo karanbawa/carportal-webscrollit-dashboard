@@ -207,6 +207,20 @@ const EcommerceCustomers = props => {
         }
       },
       {
+        Header: 'View Details',
+        accessor: 'view',
+        disableFilters: true,
+        Cell: (cellProps) => {
+          return (
+            <Link
+              to={`/ecommerce-customer-detail/${cellProps.row.original?._id}`}
+              className="btn-sm btn-rounded me-2"
+            >
+              View Details
+            </Link>);
+        }
+      },
+      {
         Header: 'Action',
         Cell: (cellProps) => {
           return (

@@ -72,23 +72,25 @@ import {
 //Include Both Helper File with needed methods
 import {
   getCartData,
-  getCustomers,
-  getOrders,
   getProducts,
   getShops,
   getProductDetail,
-  addNewOrder,
-  updateOrder,
-  deleteOrder,
-  addNewCustomer,
-  updateCustomer,
-  deleteCustomer,
   getProductComents as getProductComentsApi,
   onLikeComment as onLikeCommentApi,
   onLikeReply as onLikeReplyApi,
   onAddReply as onAddReplyApi,
   onAddComment as onAddCommentApi,
 } from "helpers/fakebackend_helper";
+import {
+  getOrders,
+  addNewOrder,
+  updateOrder,
+  deleteOrder,
+  getCustomers,
+  updateCustomer,
+  deleteCustomer,
+  addNewCustomer,
+} from "helpers/backend_helper";
 import { addNewProductInList, deleteProductInList, getProductList, updateProductInList } from "helpers/backend_helper";
 import { showToastError, showToastSuccess } from "helpers/toastBuilder";
 
@@ -111,9 +113,10 @@ function* fetchProductDetail({ productId }) {
 }
 
 function* fetchOrders() {
-  try {
+  try { 
     const response = yield call(getOrders);
-    yield put(getOrdersSuccess(response));
+    console.log('ordersData ', response);
+    yield put(getOrdersSuccess(response.data));
   } catch (error) {
     yield put(getOrdersFail(error));
   }
@@ -131,7 +134,7 @@ function* fetchCartData() {
 function* fetchCustomers() {
   try {
     const response = yield call(getCustomers);
-    yield put(getCustomersSuccess(response));
+    yield put(getCustomersSuccess(response.data.customers));
   } catch (error) {
     yield put(getCustomersFail(error));
   }
@@ -186,8 +189,10 @@ function* onUpdateOrder({ payload: order }) {
 function* onDeleteOrder({ payload: order }) {
   try {
     const response = yield call(deleteOrder, order);
-    yield put(deleteOrderSuccess(response));
+    showToastSuccess("Order deleted successfully", "Success");
+    yield put(deleteOrderSuccess(order._id));
   } catch (error) {
+    showToastError("Order failed to delete. Try Again", "Error");
     yield put(deleteOrderFail(error));
   }
 }

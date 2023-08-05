@@ -19,7 +19,7 @@ const getCollections = () => get(url.GET_COLLECTIONS)
 
 const addCollection = (formData, config) => postFormData(url.ADD_COLLECTION, formData, config)
 
-const updateCollection = (collection, config) =>  putFormData(`${url.UPDATE_COLLECTION}${collection.get('_id')}`, collection, config)
+const updateCollection = (collection, config) => putFormData(`${url.UPDATE_COLLECTION}${collection.get('_id')}`, collection, config)
 
 const deleteCollection = collectionId =>
   del(`${url.DELETE_COLLECTION}${collectionId}`)
@@ -34,14 +34,106 @@ export const updateProductInList = product =>
     // Change after API is updated
     // createdAt: product.createdAt,
     // displayProduct: product.displayProduct,
-    category : product.category
+    category: product.category
   });
 
-  export const deleteProductInList = product =>
+export const deleteProductInList = product =>
   del(`${url.DELETE_PRODUCT_IN_LIST}${product._id}`, { headers: { product } });
 
-  export const addNewProductInList = product =>
+export const addNewProductInList = product =>
   post(url.ADD_PRODUCT_IN_LIST, product);
+
+const domainAvailabilityApi = siteName =>
+  get(`${url.DOMAIN_AVAILABILITY}${siteName}`);
+
+const domainSuggestionApi = siteName =>
+  get(`${url.DOMAIN_SUGGESTION}=${siteName}`);
+
+const buyDomainApi = (domain, paymentId) =>
+  post(`${url.BUY_DOMAIN}`, {
+    domain,
+    paymentId,
+  });
+
+const onDomainOrderId = (domain, amount) =>
+  post(`${url.DOMAIN_ORDERID}`, {
+    amount: Math.round(amount) * 100,
+    currency: "INR",
+    receipt: "01",
+    notes: `${domain}`,
+  });
+
+// get orders
+export const getOrders = () => get(url.GET_ORDERS);
+
+// add order
+export const addNewOrder = order => post(`${url.ADD_NEW_ORDER}`, order);
+
+//update order
+export const updateOrder = order =>
+  put(`${url.UPDATE_ORDER}${order._id}`, {
+    customerId: order.customerId.value,
+    shippingAddress1: order.shippingAddress1,
+    shippingAddress2: order.shippingAddress2,
+    paymentStatus: order.paymentStatus,
+    paymentMethod: order.paymentMethod,
+    badgeclass: order.badgeclass,
+    city: order.city,
+    state: order.state,
+    country: order.country,
+    phone: order.phone,
+    zip: order.zip,
+    methodIcon: order.methodIcon,
+    orderItems: order.orderItems.map(product => ({
+      product: product.product._id,
+      quantity: product.quantity,
+    })),
+  });
+
+// delete order
+export const deleteOrder = order =>
+  del(`${url.DELETE_ORDER}${order._id}`, { headers: { order } });
+
+
+// CUSTOMERS
+export const getCustomers = () => get(url.GET_CUSTOMERS);
+
+export const addNewCustomer = customer => post(url.ADD_NEW_CUSTOMER, customer)
+
+export const updateCustomer = customer =>
+  put(`${url.UPDATE_CUSTOMER}${customer._id}`, {
+    username: customer.username,
+    phone: customer.phone,
+    email: customer.email,
+    address: customer.address,
+    rating: customer.rating,
+    walletBalance: customer.walletBalance,
+    joiningDate: customer.joiningDate,
+  })
+
+export const deleteCustomer = customer =>
+  del(`${url.DELETE_CUSTOMER}${customer._id}`, { headers: { customer } })
+
+export const importCustomers = customers =>
+  post(url.IMPORT_CUSTOMERS, customers)
+
+export const deleteEveryCustomer = () => del(`${url.DELETE_ALL_CUSTOMERS}`);
+
+
+//Invoices
+// get invoices
+export const getInvoices = () => get(url.GET_INVOICES);
+
+// get invoice details
+export const getInvoiceDetail = id =>
+  get(`${url.GET_INVOICE_DETAIL}/${id}`, { params: { id } });
+
+ export const deleteAllInvoice = customerId =>
+  del(`${url.DELETE_ALL_INVOICE}/${customerId}`);
+
+  export const deleteInvoice = (customerId, invoiceId) =>
+  del(`${url.DELETE_INVOICE}/${customerId}/customerinvoices/${invoiceId}`);
+
 
 
 export {
@@ -54,5 +146,9 @@ export {
   addCollection,
   updateCollection,
   deleteCollection,
-  getProductList
+  getProductList,
+  domainAvailabilityApi,
+  domainSuggestionApi,
+  buyDomainApi,
+  onDomainOrderId
 };

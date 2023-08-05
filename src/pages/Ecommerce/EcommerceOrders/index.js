@@ -51,6 +51,7 @@ import {
   Card,
   CardBody,
 } from "reactstrap";
+import OrderDetail from "./OrderDetail";
 
 function EcommerceOrder() {
 
@@ -225,7 +226,7 @@ function EcommerceOrder() {
     if (orders && !orders.length) {
       dispatch(onGetOrders());
     }
-  }, [dispatch, orders]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (customers && !customers.length) {
@@ -331,10 +332,10 @@ function EcommerceOrder() {
   };
 
   const handleDeleteOrder = () => {
-    if (order && order.id) {
-      dispatch(onDeleteOrder(order.id));
+    if (order && order._id) {
+      dispatch(onDeleteOrder(order));
       setDeleteModal(false);
-    }
+    } 
   };
   const handleOrderClicks = () => {
     setOrderList("");
@@ -347,7 +348,7 @@ function EcommerceOrder() {
 
       {
         Header: 'Order ID',
-        accessor: 'orderId',
+        accessor: '_id',
         width: '150px',
         style: {
           textAlign: "center",
@@ -361,7 +362,7 @@ function EcommerceOrder() {
       },
       {
         Header: 'Billing Name',
-        accessor: 'customerId',
+        accessor: 'customerId.username',
         filterable: true,
         Cell: (cellProps) => {
           return <BillingName {...cellProps} />;
@@ -377,7 +378,7 @@ function EcommerceOrder() {
       },
       {
         Header: 'Total',
-        accessor: 'total',
+        accessor: 'totalPrice',
         filterable: true,
         Cell: (cellProps) => {
           return <Total {...cellProps} />;
@@ -402,13 +403,16 @@ function EcommerceOrder() {
         Header: 'View Details',
         accessor: 'view',
         disableFilters: true,
-        Cell: () => {
+        Cell: (cellProps) => {
           return (
             <Button
               type="button"
               color="primary"
               className="btn-sm btn-rounded"
-              onClick={toggleViewModal}
+              onClick={e => {
+                toggleViewModal();
+                setOrderData(cellProps.row.original);
+              }}
             >
               View Details
             </Button>);
@@ -457,7 +461,8 @@ function EcommerceOrder() {
 
   return (
     <React.Fragment>
-      <EcommerceOrdersModal isOpen={modal1} toggle={toggleViewModal} />
+      {/* <EcommerceOrdersModal isOpen={modal1} toggle={toggleViewModal} data={orderData} /> */}
+      <OrderDetail isOpen={modal1} toggle={toggleViewModal} Data={orderData} />
       <DeleteModal
         show={deleteModal}
         onDeleteClick={handleDeleteOrder}
@@ -475,6 +480,7 @@ function EcommerceOrder() {
                     data={orders}
                     isGlobalFilter={true}
                     isAddOptions={true}
+                    isEventAddButtonOptions = {true}
                     handleOrderClicks={handleOrderClicks}
                     customPageSize={10}
                   />

@@ -1,4 +1,10 @@
 import {
+  DELETE_ALL_INVOICE,
+  DELETE_ALL_INVOICE_FAIL,
+  DELETE_ALL_INVOICE_SUCCESS,
+  DELETE_INVOICE,
+  DELETE_INVOICE_FAIL,
+  DELETE_INVOICE_SUCCESS,
   GET_INVOICES,
   GET_INVOICES_FAIL,
   GET_INVOICES_SUCCESS,
@@ -35,3 +41,31 @@ export const getInvoiceDetailFail = error => ({
   type: GET_INVOICE_DETAIL_FAIL,
   payload: error,
 })
+
+export const deleteAllInvoice = () => ({
+  type: DELETE_ALL_INVOICE,
+});
+
+export const deleteAllInvoiceSuccess = () => ({
+  type: DELETE_ALL_INVOICE_SUCCESS,
+});
+
+export const deleteAllInvoiceFail = error => ({
+  type: DELETE_ALL_INVOICE_FAIL,
+  payload: error,
+});
+
+export const deleteInvoice = (customerId, invoiceId) => ({
+  type: DELETE_INVOICE,
+  payload: { customerId, invoiceId },
+});
+
+export const deleteInvoiceSuccess = (customerId, invoiceId) => ({
+  type: DELETE_INVOICE_SUCCESS,
+  payload: { customerId, invoiceId },
+});
+
+export const deleteInvoiceFail = error => ({
+  type: DELETE_INVOICE_FAIL,
+  payload: error,
+});

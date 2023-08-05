@@ -61,7 +61,19 @@ import {
   UPDATE_PRODUCT_IN_LIST_FAIL,
   DELETE_PRODUCT_IN_LIST,
   DELETE_PRODUCT_IN_LIST_SUCCESS,
-  DELETE_PRODUCT_IN_LIST_FAIL
+  DELETE_PRODUCT_IN_LIST_FAIL,
+  GET_CUSTOMER_INVOICE_FAIL,
+  GET_CUSTOMER_INVOICE_SUCCESS,
+  GET_CUSTOMER_INVOICE,
+  DELETE_ALL_INVOICE,
+  DELETE_ALL_INVOICE_SUCCESS,
+  DELETE_ALL_INVOICE_FAIL,
+  DELETE_INVOICE,
+  DELETE_INVOICE_SUCCESS,
+  DELETE_INVOICE_FAIL,
+  GET_CUSTOMER_ORDER,
+  GET_CUSTOMER_ORDER_SUCCESS,
+  GET_CUSTOMER_ORDER_FAIL
 } from "./actionTypes"
 
 
@@ -372,3 +384,138 @@ export const onAddCommentFail = error => ({
   type: ON_ADD_COMMENT_FAIL,
   payload: error,
 })
+
+// Customer invoices
+export const getCustomerInvoice = () => ({
+  type: GET_CUSTOMER_INVOICE,
+});
+
+export const getCustomerInvoiceSuccess = invoice => ({
+  type: GET_CUSTOMER_INVOICE_SUCCESS,
+  payload: invoice,
+});
+
+export const getCustomerInvoiceFail = error => ({
+  type: GET_CUSTOMER_INVOICE_FAIL,
+  payload: error,
+});
+
+export const deleteAllCustomerInvoice = customerId => ({
+  type: DELETE_ALL_CUSTOMER_INVOICE,
+  payload: customerId,
+});
+
+export const deleteAllCustomerInvoiceSuccess = () => ({
+  type: DELETE_ALL_CUSTOMER_INVOICE_SUCCESS,
+});
+
+export const deleteAllCustomerInvoiceFail = error => ({
+  type: DELETE_ALL_CUSTOMER_INVOICE_FAIL,
+  payload: error,
+});
+
+export const deleteCustomerInvoice = (customerId, invoiceId) => ({
+  type: DELETE_CUSTOMER_INVOICE,
+  payload: { customerId, invoiceId },
+});
+
+export const deleteCustomerInvoiceSuccess = invoiceId => ({
+  type: DELETE_CUSTOMER_INVOICE_SUCCESS,
+  payload: invoiceId,
+});
+
+export const deleteCustomerInvoiceFail = error => ({
+  type: DELETE_CUSTOMER_INVOICE_FAIL,
+  payload: error,
+});
+
+// Customer details
+export const getCustomerOrder = CustomerId => ({
+  type: GET_CUSTOMER_ORDER,
+  payload: CustomerId,
+});
+
+export const getCustomerOrderSuccess = orderId => ({
+  type: GET_CUSTOMER_ORDER_SUCCESS,
+  payload: orderId,
+});
+
+export const getCustomerOrderFail = error => ({
+  type: GET_CUSTOMER_ORDER_FAIL,
+  payload: error,
+});
+
+// Customer Notes
+export const getNotes = customerId => ({
+  type: GET_NOTES,
+  payload: customerId,
+});
+
+export const getNotesSuccess = notes => ({
+  type: GET_NOTES_SUCCESS,
+  payload: notes,
+});
+
+export const getNotesFail = error => ({
+  type: GET_NOTES_FAIL,
+  payload: error,
+});
+
+export const addNotes = (customerId, notes) => ({
+  type: ADD_NOTES,
+  payload: { customerId, notes },
+});
+
+export const addNotesSuccess = notes => ({
+  type: ADD_NOTES_SUCCESS,
+  payload: notes,
+});
+
+export const addNotesFail = error => ({
+  type: ADD_NOTES_FAIL,
+  payload: error,
+});
+
+export const deleteAllNotes = customerId => ({
+  type: DELETE_ALL_NOTES,
+  payload: customerId,
+});
+
+export const deleteAllNotesSuccess = () => ({
+  type: DELETE_ALL_NOTES_SUCCESS,
+});
+
+export const deleteAllNotesFail = error => ({
+  type: DELETE_ALL_NOTES_FAIL,
+  payload: error,
+});
+
+export const updateNotes = (customerId, noteId, note) => ({
+  type: UPDATE_NOTES,
+  payload: { customerId, noteId, note },
+});
+
+export const updateNotesSuccess = (noteId, note) => ({
+  type: UPDATE_NOTES_SUCCESS,
+  payload: { noteId, note },
+});
+
+export const updateNotesFail = error => ({
+  type: UPDATE_NOTES_FAIL,
+  payload: error,
+});
+
+export const deleteNote = (customerId, noteId) => ({
+  type: DELETE_NOTE,
+  payload: { customerId, noteId },
+});
+
+export const deleteNoteSuccess = noteId => ({
+  type: DELETE_NOTE_SUCCESS,
+  payload: noteId,
+});
+
+export const deleteNoteFail = error => ({
+  type: DELETE_NOTE_FAIL,
+  payload: error,
+});

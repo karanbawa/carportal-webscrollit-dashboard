@@ -43,3 +43,10 @@ export const UPDATE_CUSTOMER = "/v1/customer/update/";
 export const DELETE_CUSTOMER = "/v1/customer/delete/";
 export const DELETE_ALL_CUSTOMERS = "/v1/customer/deleteall";
 export const IMPORT_CUSTOMERS = "/v1/customer/importcustomers";
+
+// Invoices
+export const GET_INVOICES = "v1/orders/get/invoices";
+export const GET_INVOICE_DETAIL = "/invoice";
+export const CUSTOMER_INVOICE = "v1/orders/get/invoices";
+export const DELETE_ALL_INVOICE = "v1/orders/delete/customerinvoices";
+export const DELETE_INVOICE = "v1/orders/delete/customer";
