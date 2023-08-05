@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { isEmpty } from "lodash";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import * as XLSX from "xlsx";
 import {
   Card,
   CardBody,
@@ -50,6 +51,17 @@ import {
   WalletBalances,
   JoiningDate,
 } from './EcommerceCustCol';
+import EcommerceCustomersImportModal from "./EcommerceCustomersImportModal";
+
+const dataFields = [
+  "username",
+  "email",
+  "phone",
+  "address",
+  "rating",
+  "walletBalance",
+  "joiningDate",
+];
 
 const EcommerceCustomers = props => {
 
@@ -66,6 +78,7 @@ const EcommerceCustomers = props => {
   const [customerList, setCustomerList] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const [customer, setCustomer] = useState(null);
+  const [modal1, setModal1] = useState(false);
 
   // validation
   const validation = useFormik({
@@ -151,13 +164,6 @@ const EcommerceCustomers = props => {
   // Customber Column
   const columns = useMemo(
     () => [
-
-      {
-        Header: '#',
-        Cell: () => {
-          return <input type="checkbox" className="form-check-input" />;
-        }
-      },
       {
         Header: 'Username',
         accessor: 'username',
@@ -282,8 +288,8 @@ const EcommerceCustomers = props => {
   };
 
   const handleDeleteCustomer = () => {
-    if (customer && customer.id) {
-      dispatch(onDeleteCustomer(customer.id));
+    if (customer && customer._id) {
+      dispatch(onDeleteCustomer(customer._id));
       setDeleteModal(false);
     }
   };
@@ -310,8 +316,39 @@ const EcommerceCustomers = props => {
     toggle();
   };
 
+  const handleExportCustomers = format => {
+    const filteredData = customerList.map(obj =>
+      Object.fromEntries(
+        Object.entries(obj).filter(r => dataFields.indexOf(r[0]) > -1)
+      )
+    );
+    const book = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(filteredData);
+    XLSX.utils.book_append_sheet(book, ws, "Customers");
+    XLSX.writeFile(book, `Customers.${format}`);
+  };
+
+  const handleDownloadTemplate = format => {
+    const book = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet([dataFields]);
+    XLSX.utils.book_append_sheet(book, ws, "Customers");
+    XLSX.writeFile(book, `Customers Template.${format}`);
+  };
+
+  const toggleViewModal = () => setModal1(!modal1);
+
+  const handleDeleteAllCustomerModel = () => {
+    setDeleteModal(true);
+  }
+
   return (
     <React.Fragment>
+      <EcommerceCustomersImportModal
+        isOpen={modal1}
+        toggle={toggleViewModal}
+        customers={customerList}
+        dataFields={dataFields}
+      />
       <DeleteModal
         show={deleteModal}
         onDeleteClick={handleDeleteCustomer}
@@ -329,7 +366,11 @@ const EcommerceCustomers = props => {
                     data={customers}
                     isGlobalFilter={true}
                     isAddCustList={true}
+                    handleDeleteAllCustomerModel= {handleDeleteAllCustomerModel}
                     handleCustomerClick={handleCustomerClicks}
+                    handleDownloadTemplate = {handleDownloadTemplate}
+                    handleExportCustomers = {handleExportCustomers}
+                    toggleViewModal = {toggleViewModal}
                     customPageSize={10}
                     className="custom-header-css"
                   />

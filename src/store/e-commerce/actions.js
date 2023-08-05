@@ -73,7 +73,16 @@ import {
   DELETE_INVOICE_FAIL,
   GET_CUSTOMER_ORDER,
   GET_CUSTOMER_ORDER_SUCCESS,
-  GET_CUSTOMER_ORDER_FAIL
+  GET_CUSTOMER_ORDER_FAIL,
+  DELETE_ALL_ORDERS,
+  DELETE_ALL_ORDER_SUCCESS,
+  DELETE_ALL_ORDER_FAIL,
+  IMPORT_CUSTOMERS,
+  IMPORT_CUSTOMERS_SUCCESS,
+  IMPORT_CUSTOMERS_FAIL,
+  DELETE_ALL_CUSTOMERS,
+  DELETE_ALL_CUSTOMERS_FAIL,
+  DELETE_ALL_CUSTOMERS_SUCCESS
 } from "./actionTypes"
 
 
@@ -224,6 +233,18 @@ export const deleteOrderFail = error => ({
   payload: error,
 })
 
+export const deleteAllOrders = () => ({
+  type: DELETE_ALL_ORDERS,
+});
+
+export const deleteAllOrdersSuccess = () => ({
+  type: DELETE_ALL_ORDER_SUCCESS,
+});
+
+export const deleteAllOrdersFail = () => ({
+  type: DELETE_ALL_ORDER_FAIL,
+});
+
 export const getCartData = () => ({
   type: GET_CART_DATA,
 })
@@ -282,15 +303,43 @@ export const updateCustomerFail = error => ({
   payload: error,
 })
 
-export const deleteCustomer = customer => ({
+export const importCustomers = customers => ({
+  type: IMPORT_CUSTOMERS,
+  payload: customers,
+});
+
+export const importCustomerSuccess = customers => ({
+  type: IMPORT_CUSTOMERS_SUCCESS,
+  payload: customers,
+});
+
+export const importCustomerFail = error => ({
+  type: IMPORT_CUSTOMERS_FAIL,
+  payload: error,
+});
+
+export const deleteCustomer = id => ({
   type: DELETE_CUSTOMER,
-  payload: customer,
+  payload: id,
 })
 
-export const deleteCustomerSuccess = customer => ({
+export const deleteCustomerSuccess = id => ({
   type: DELETE_CUSTOMER_SUCCESS,
-  payload: customer,
+  payload: id,
 })
+
+export const deleteAllCustomers = () => ({
+  type: DELETE_ALL_CUSTOMERS,
+});
+
+export const deleteAllCustomersSuccess = () => ({
+  type: DELETE_ALL_CUSTOMERS_SUCCESS,
+});
+
+export const deleteAllCustomersFail = error => ({
+  type: DELETE_ALL_CUSTOMERS_FAIL,
+  payload: error,
+});
 
 export const deleteCustomerFail = error => ({
   type: DELETE_CUSTOMER_FAIL,

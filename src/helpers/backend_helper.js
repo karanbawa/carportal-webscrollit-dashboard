@@ -94,6 +94,8 @@ export const updateOrder = order =>
 export const deleteOrder = order =>
   del(`${url.DELETE_ORDER}${order._id}`, { headers: { order } });
 
+  export const deleteAllOrdersCall = () => del(url.DELETE_ALL_ORDER);
+
 
 // CUSTOMERS
 export const getCustomers = () => get(url.GET_CUSTOMERS);
@@ -111,14 +113,13 @@ export const updateCustomer = customer =>
     joiningDate: customer.joiningDate,
   })
 
-export const deleteCustomer = customer =>
-  del(`${url.DELETE_CUSTOMER}${customer._id}`, { headers: { customer } })
+export const deleteCustomer = id =>
+  del(`${url.DELETE_CUSTOMER}${id}`)
 
 export const importCustomers = customers =>
   post(url.IMPORT_CUSTOMERS, customers)
 
 export const deleteEveryCustomer = () => del(`${url.DELETE_ALL_CUSTOMERS}`);
-
 
 //Invoices
 // get invoices

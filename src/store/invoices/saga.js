@@ -14,7 +14,7 @@ import { showToastError, showToastSuccess } from "helpers/toastBuilder";
 function* fetchInvoices() {
   try {
     const response = yield call(getInvoices);
-    yield put(getInvoicesSuccess(response));
+    yield put(getInvoicesSuccess(response.data));
   } catch (error) {
     yield put(getInvoicesFail(error));
   }

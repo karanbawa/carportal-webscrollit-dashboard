@@ -142,6 +142,7 @@ export default function AddCollection() {
     collectionProductIds.forEach((productIds) => {
       collection.append("products[]", productIds);
     });
+    console.log('collection', collection);
      dispatch(
       addCollection(collection, history)
     )

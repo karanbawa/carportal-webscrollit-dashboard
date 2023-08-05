@@ -23,6 +23,9 @@ import {
   UPDATE_PRODUCT_IN_LIST,
   DELETE_PRODUCT_IN_LIST,
   ADD_NEW_PRODUCT_IN_LIST,
+  DELETE_ALL_ORDERS,
+  IMPORT_CUSTOMERS,
+  DELETE_ALL_CUSTOMERS,
 } from "./actionTypes";
 import {
   getCartDataFail,
@@ -67,6 +70,10 @@ import {
   deleteProductInListFail,
   addProductInListSuccess,
   addProductInListFail,
+  deleteAllOrdersSuccess,
+  deleteAllOrdersFail,
+  importCustomerSuccess,
+  importCustomerFail,
 } from "./actions";
 
 //Include Both Helper File with needed methods
@@ -90,6 +97,9 @@ import {
   updateCustomer,
   deleteCustomer,
   addNewCustomer,
+  deleteAllOrdersCall,
+  importCustomers,
+  deleteEveryCustomer,
 } from "helpers/backend_helper";
 import { addNewProductInList, deleteProductInList, getProductList, updateProductInList } from "helpers/backend_helper";
 import { showToastError, showToastSuccess } from "helpers/toastBuilder";
@@ -149,10 +159,10 @@ function* onUpdateCustomer({ payload: customer }) {
   }
 }
 
-function* onDeleteCustomer({ payload: customer }) {
+function* onDeleteCustomer({ payload: id }) {
   try {
-    const response = yield call(deleteCustomer, customer);
-    yield put(deleteCustomerSuccess(response));
+    const response = yield call(deleteCustomer, id);
+    yield put(deleteCustomerSuccess(id));
   } catch (error) {
     yield put(deleteCustomerFail(error));
   }
@@ -180,7 +190,7 @@ function* fetchShops() {
 function* onUpdateOrder({ payload: order }) {
   try {
     const response = yield call(updateOrder, order);
-    yield put(updateOrderSuccess(response));
+    yield put(updateOrderSuccess(response.data));
   } catch (error) {
     yield put(updateOrderFail(error));
   }
@@ -197,10 +207,22 @@ function* onDeleteOrder({ payload: order }) {
   }
 }
 
+function* onDeleteAllOrders() {
+  try {
+    console.log('datacheck');
+    const response = yield call(deleteAllOrdersCall);
+    showToastSuccess("All Orders deleted successfully", "Success");
+    yield put(deleteAllOrdersSuccess());
+  } catch {
+    yield put(deleteAllOrdersFail());
+    showToastError("Orders failed to delete. Try Again", "Error");
+  }
+}
+
 function* onAddNewOrder({ payload: order }) {
   try {
     const response = yield call(addNewOrder, order);
-    yield put(addOrderSuccess(response));
+    yield put(addOrderSuccess(response.data));
   } catch (error) {
     yield put(addOrderFail(error));
   }
@@ -293,6 +315,24 @@ function* onAddNewProductInList({ payload: product }) {
   }
 }
 
+function* onImportCustomers({ payload: customers }) {
+  try {
+    const response = yield call(importCustomers, customers);
+    yield put(importCustomerSuccess(response.data));
+  } catch (error) {
+    yield put(importCustomerFail(error));
+  }
+}
+
+function* onDeleteAllCustomers() {
+  try {
+    const response = yield call(deleteEveryCustomer);
+    yield put(deleteAllCustomersSuccess());
+  } catch (error) {
+    yield put(deleteAllCustomersFail(error));
+  }
+}
+
 function* ecommerceSaga() {
   yield takeEvery(GET_PRODUCTS, fetchProducts);
   yield takeEvery(GET_PRODUCT_DETAIL, fetchProductDetail);
@@ -302,6 +342,8 @@ function* ecommerceSaga() {
   yield takeEvery(ADD_NEW_CUSTOMER, onAddNewCustomer);
   yield takeEvery(UPDATE_CUSTOMER, onUpdateCustomer);
   yield takeEvery(DELETE_CUSTOMER, onDeleteCustomer);
+  yield takeEvery(IMPORT_CUSTOMERS, onImportCustomers);
+  yield takeEvery(DELETE_ALL_CUSTOMERS, onDeleteAllCustomers);
   yield takeEvery(GET_SHOPS, fetchShops);
   yield takeEvery(ADD_NEW_ORDER, onAddNewOrder);
   yield takeEvery(UPDATE_ORDER, onUpdateOrder);
@@ -315,6 +357,7 @@ function* ecommerceSaga() {
   yield takeEvery(UPDATE_PRODUCT_IN_LIST, onUpdateProductInList);
   yield takeEvery(DELETE_PRODUCT_IN_LIST, onDeleteProductInList);
   yield takeEvery(ADD_NEW_PRODUCT_IN_LIST, onAddNewProductInList);
+  yield takeEvery(DELETE_ALL_ORDERS, onDeleteAllOrders);
 }
 
 export default ecommerceSaga;

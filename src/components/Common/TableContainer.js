@@ -9,7 +9,7 @@ import {
   useExpanded,
   usePagination,
 } from "react-table";
-import { Table, Row, Col, Button, Input, CardBody } from "reactstrap";
+import { Table, Row, Col, Button, Input, CardBody, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import { Filter, DefaultColumnFilter } from "./filters";
 import JobListGlobalFilter from "../../components/Common/GlobalSearchFilter";
 
@@ -67,8 +67,13 @@ const TableContainer = ({
   isJobListGlobalFilter,
   isAddOptions,
   isProductListAddOptions,
+  handleDownloadTemplate,
+  handleExportCustomers,
+  handleDeleteAllCustomerModel,
+  toggleViewModal,
   isAddUserList,
   handleOrderClicks,
+  handleOrderDeleteClicks,
   handleUserClick,
   handleCustomerClick,
   handleProductListClicks,
@@ -155,7 +160,8 @@ const TableContainer = ({
           />
         )}
         {isAddOptions && (
-          <Col sm="7">
+          <Col sm="7" className="d-flex justify-content-end">
+            {/* <div className="text-sm-end"> */}
             <div className="text-sm-end">
               <Button
                 type="button"
@@ -167,6 +173,18 @@ const TableContainer = ({
                 Add New Order
               </Button>
             </div>
+            <div className="text-sm-end">
+              <Button
+                type="button"
+                color="danger"
+                className="btn-rounded  mb-2 me-2"
+                onClick={handleOrderDeleteClicks}
+              >
+                <i className="mdi mdi-plus me-1" />
+                Delete all orders
+              </Button>
+            </div>
+            {/* </div> */}
           </Col>
         )}
         {isProductListAddOptions && (
@@ -200,7 +218,71 @@ const TableContainer = ({
           </Col>
         )}
         {isAddCustList && (
-          <Col sm="7">
+          <Col sm="7" className="d-flex justify-content-end">
+            <div className="text-sm-end">
+              <Button
+                type="button"
+                color="success"
+                className="btn-rounded mb-2 me-2"
+                onClick={toggleViewModal}
+              >
+                <i className="me-2 me-2 fa fa-file-import " />
+                New Customers
+              </Button>
+            </div>
+            <UncontrolledDropdown
+              direction="left"
+              className="d-inline mb-2 me-2 align-middle"
+            >
+              <DropdownToggle
+                className=" btn-rounded btn-primary align-middle mb-2"
+                color="success"
+                href="#"
+              >
+                <i className="me-2 me-2 fa fa-file-export " />{" "}
+                Export
+              </DropdownToggle>
+              <DropdownMenu className="dropdown-menu-end">
+                <DropdownItem
+                  href="#"
+                  onClick={() =>
+                    handleExportCustomers("xlsx")
+                  }
+                  disabled={data.length === 0}
+                >
+                  <i className="fas fa-file-excel text-success me-2" />
+                  Save as Customers.xlsx
+                </DropdownItem>
+                <DropdownItem
+                  href="#"
+                  onClick={() =>
+                    handleExportCustomers("csv")
+                  }
+                  disabled={data.length === 0}
+                >
+                  <i className="fas fa-file-excel text-success me-2" />
+                  Save as Customers.csv
+                </DropdownItem>
+                <DropdownItem
+                  href="#"
+                  onClick={() =>
+                    handleDownloadTemplate("xlsx")
+                  }
+                >
+                  <i className="fas fa-file-excel text-success me-2" />
+                  Download template - xlsx
+                </DropdownItem>
+                <DropdownItem
+                  href="#"
+                  onClick={() =>
+                    handleDownloadTemplate("csv")
+                  }
+                >
+                  <i className="fas fa-file-excel text-success me-2" />
+                  Download template - csv
+                </DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
             <div className="text-sm-end">
               <Button
                 type="button"
@@ -210,6 +292,17 @@ const TableContainer = ({
               >
                 <i className="mdi mdi-plus me-1" />
                 New Customers
+              </Button>
+              <Button
+                type="button"
+                color="danger"
+                className="btn-rounded  mb-2 me-2"
+                onClick={() => {
+                  handleDeleteAllCustomerModel(true);
+                }}
+              >
+                <i className="mdi mdi-delete me-1" />
+                Delete all customers
               </Button>
             </div>
           </Col>

@@ -2,14 +2,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { isEmpty } from "lodash";
-import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import TableContainer from '../../../components/Common/TableContainer';
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
 //import components
-import Breadcrumbs from '../../../components/Common/Breadcrumb';
-import DeleteModal from '../../../components/Common/DeleteModal';
+import Breadcrumbs from '../../components/Common/Breadcrumb';
+import DeleteModal from '../../components/Common/DeleteModal';
 
 import {
   getOrders as onGetOrders,
@@ -17,6 +15,7 @@ import {
   updateOrder as onUpdateOrder,
   deleteProductInList as onDeleteProduct,
   getProductList,
+  getInvoices,
 } from "store/actions";
 
 import {
@@ -24,13 +23,14 @@ import {
   Date,
   Price,
   Category,
-  ProductDisplay
+  ProductDisplay,
+  InvoiceId
 }
-  from "./EcommerceProductListCol";
+  from "./InvoiceCol";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import EcommerceProductListModal from "./EcommerceProductListModal";
+import EcommerceProductListModal from "./InvoiceModal";
 
 import {
   Button,
@@ -47,81 +47,49 @@ import {
   Card,
   CardBody,
 } from "reactstrap";
+import TableContainer from "components/Common/TableContainer";
 
-function EcommerceProductList() {
+function Invoice() {
 
   //meta title
-  document.title = "Product List | Scrollit";
+  document.title = "Product List | Scrollit"; 
 
   const history = useNavigate();
 
-  const [productList, setProductList] = useState([]);
-  const [product, setProduct] = useState(null);
+  const [invoiceList, setInvoiceList] = useState([]);
+  const [invoice, setInvoice] = useState(null);
   const [modal, setModal] = useState(false);
   const [modal1, setModal1] = useState(false);
 
   // edit Product
   const [isEdit, setIsEdit] = useState(false);
 
-  //delete Product
+  //delete Invoice
   const [deleteModal, setDeleteModal] = useState(false);
-
-  // const [orderList, setOrderList] = useState([]);
-  const [order, setOrder] = useState(null);
-
-  // validation
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
-    initialValues: {
-      name: (product && product.name) || "",
-      createdAt: (product && product?.createdAt) || "2020-10-11",
-      price: (product && product.price) || "",
-      category: (product && product.categories[0]) || "",
-      displayProduct: (product && product.displayProduct) || true,
-    },
-    validationSchema: Yup.object({
-      name: Yup.string().required("Please Enter Product Name"),
-      createdAt: Yup.string().required("Please Enter Product Creation Date"),
-      price: Yup.string().required("Product Price")
-    }),
-    onSubmit: (values) => {
-      const updatedProduct = {
-        ...product,
-        name: values.name,
-        price: values.price.toString()
-      }
-      dispatch(updateProductInList(updatedProduct));
-      validation.resetForm();
-      toggle();
-    },
-  });
-
 
   const toggleViewModal = () => setModal1(!modal1);
 
   const dispatch = useDispatch();
-  const { products } = useSelector(state => ({
-    products: state.ecommerce.productList,
+  const { invoices } = useSelector(state => ({
+    invoices: state.invoices.invoices,
   }));
 
   useEffect(() => {
-    if (products && !products?.length) {
-      dispatch(getProductList())
+    if (invoices && !invoices?.length) {
+      dispatch(getInvoices())
     }
   }, [dispatch]);
 
   useEffect(() => {
-    setProductList(products);
-  }, [products]);
+    setInvoiceList(invoices);
+  }, [invoices]);
 
   useEffect(() => {
-    if (!isEmpty(products) && !!isEdit) {
-      setOrderList(products);
+    if (!isEmpty(invoices) && !!isEdit) {
+      setInvoiceList(products);
       setIsEdit(false);
     }
-  }, [products]);
+  }, [invoices]);
 
   const toggle = () => {
     if (modal) {
@@ -132,9 +100,9 @@ function EcommerceProductList() {
     }
   };
 
-  const handleOrderClick = arg => {
+  const handleInvoiceClick = arg => {
     const order = arg;
-    setOrder({
+    setInvoice({
       id: order.id,
       orderId: order.orderId,
       productName: order.productName,
@@ -150,14 +118,14 @@ function EcommerceProductList() {
     toggle();
   };
 
-  const onClickDelete = (product) => {
-    setProduct(product);
+  const onClickDelete = (invoice) => {
+    setInvoice(invoice);
     setDeleteModal(true);
   };
 
   const handleDeleteProductFromList = () => {
-    if (product && product._id) {
-      dispatch(onDeleteProduct(product));
+    if (invoice && invoice._id) {
+      dispatch(onDeleteProduct(invoice));
       setDeleteModal(false);
     }
   };
@@ -171,43 +139,35 @@ function EcommerceProductList() {
   const columns = useMemo(
     () => [
       {
-        Header: 'Product Name',
-        accessor: 'name',
+        Header: 'Customer Name',
+        accessor: 'customerId.username',
         filterable: true,
         Cell: (cellProps) => {
           return <ProductName {...cellProps} />;
         }
       },
       {
-        Header: 'Date',
-        accessor: 'productDate',
+        Header: 'Invoice Id',
+        accessor: '_id',
         filterable: true,
         Cell: (cellProps) => {
-          return <Date {...cellProps} />;
+          return <InvoiceId {...cellProps} />;
         }
       },
       {
-        Header: 'Price',
-        accessor: 'price',
+        Header: 'Order Date',
+        accessor: 'orderDate',
         filterable: true,
         Cell: (cellProps) => {
           return <Price {...cellProps} />;
         }
       },
       {
-        Header: 'Category',
-        accessor: 'category',
+        Header: 'Total Amount',
+        accessor: 'totalPrice',
         filterable: true,
         Cell: (cellProps) => {
           return <Category {...cellProps} />;
-        }
-      },
-      {
-        Header: 'Product Display',
-        accessor: 'displayProduct',
-        filterable: true,
-        Cell: (cellProps) => {
-          return <ProductDisplay {...cellProps} />;
         }
       },
       {
@@ -233,26 +193,11 @@ function EcommerceProductList() {
         disableFilters: true,
         Cell: (cellProps) => {
           return (
-            <div className="d-flex gap-3">
-              <Link
-                to="#"
-                className="text-success"
-                onClick={() => {
-                  const productData = cellProps.row.original;
-                  handleProductListClicks(productData);
-                }}
-              >
-                <i className="mdi mdi-pencil font-size-18" id="edittooltip" />
-                <UncontrolledTooltip placement="top" target="edittooltip">
-                  Edit
-                </UncontrolledTooltip>
-              </Link>
               <Link
                 to="#"
                 className="text-danger"
                 onClick={() => {
                   const productData = cellProps.row.original;
-                  console.log('productData ', productData);
                   onClickDelete(productData);
                 }}
               >
@@ -261,7 +206,6 @@ function EcommerceProductList() {
                   Delete
                 </UncontrolledTooltip>
               </Link>
-            </div>
           );
         }
       },
@@ -279,14 +223,14 @@ function EcommerceProductList() {
       />
       <div className="page-content">
         <div className="container-fluid">
-          <Breadcrumbs title="Ecommerce" count={productList?.length} breadcrumbItem="Products List" />
+          <Breadcrumbs title="Ecommerce" count={invoiceList?.length} breadcrumbItem="Products List" />
           <Row>
             <Col xs="12">
               <Card>
                 <CardBody>
                   <TableContainer
                     columns={columns}
-                    data={products}
+                    data={invoices}
                     isGlobalFilter={true}
                     isProductListAddOptions={true}
                     handleProductListClicks={handleProductListClicks}
@@ -439,10 +383,10 @@ function EcommerceProductList() {
     </React.Fragment>
   );
 }
-EcommerceProductList.propTypes = {
+Invoice.propTypes = {
   preGlobalFilteredRows: PropTypes.any,
 
 };
 
 
-export default EcommerceProductList;
+export default Invoice;

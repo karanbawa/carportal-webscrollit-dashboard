@@ -6,6 +6,7 @@ import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import TableContainer from '../../../components/Common/TableContainer';
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import Select from "react-select";
 
 //import components
 import Breadcrumbs from '../../../components/Common/Breadcrumb';
@@ -173,7 +174,7 @@ function EcommerceOrder() {
       }
       toggle();
     },
-    handleError: e => {},
+    handleError: e => { },
   });
 
   const validation2 = useFormik({
@@ -250,7 +251,7 @@ function EcommerceOrder() {
       products
         .filter(product =>
           validation.values.orderItems.every(
-            entry => entry.product._id !== product._id
+            entry => entry.product?._id !== product._id
           )
         )
         .map(product => ({ value: product._id, label: product.name }))
@@ -281,6 +282,7 @@ function EcommerceOrder() {
 
   useEffect(() => {
     if (!isEmpty(orders) && !!isEdit) {
+      
       setOrderList(orders);
       setIsEdit(false);
     }
@@ -297,16 +299,8 @@ function EcommerceOrder() {
 
   const handleOrderClick = arg => {
     const order = arg;
-    setOrder({
-      id: order.id,
-      orderId: order.orderId,
-      billingName: order.billingName,
-      orderdate: order.orderdate,
-      total: order.total,
-      paymentStatus: order.paymentStatus,
-      paymentMethod: order.paymentMethod,
-      badgeclass: order.badgeclass,
-    });
+    console.log('order ', order);
+    setOrder(order);
 
     setIsEdit(true);
 
@@ -335,13 +329,21 @@ function EcommerceOrder() {
     if (order && order._id) {
       dispatch(onDeleteOrder(order));
       setDeleteModal(false);
-    } 
+    } else {
+      dispatch(ondeleteAllOrders(order));
+      setDeleteModal(false);
+    }
   };
   const handleOrderClicks = () => {
     setOrderList("");
     setIsEdit(false);
     toggle();
   };
+
+  const handleOrderDeleteClicks = () => {
+    setOrder();
+    setDeleteModal(true);
+  }
 
   const columns = useMemo(
     () => [
@@ -480,8 +482,9 @@ function EcommerceOrder() {
                     data={orders}
                     isGlobalFilter={true}
                     isAddOptions={true}
-                    isEventAddButtonOptions = {true}
+                    isEventAddButtonOptions={true}
                     handleOrderClicks={handleOrderClicks}
+                    handleOrderDeleteClicks={handleOrderDeleteClicks}
                     customPageSize={10}
                   />
                 </CardBody>
@@ -494,114 +497,917 @@ function EcommerceOrder() {
             </ModalHeader>
             <ModalBody>
               <Form
-                onSubmit={(e) => {
+                onSubmit={e => {
                   e.preventDefault();
                   validation.handleSubmit();
+                  validation.setFieldTouched(
+                    "billingName",
+                    true
+                  );
+                  validation.setFieldTouched(
+                    "orderItems",
+                    true
+                  );
                   return false;
                 }}
               >
-                <Row>
+                <Row form="true">
                   <Col className="col-12">
                     <div className="mb-3">
-                      <Label className="form-label">Order Id</Label>
-                      <Input
-                        name="orderId"
-                        type="text"
-                        placeholder="Insert Order Id"
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.orderId || ""}
-                        invalid={
-                          validation.touched.orderId && validation.errors.orderId ? true : false
-                        }
-                      />
-                      {validation.touched.orderId && validation.errors.orderId ? (
-                        <FormFeedback type="invalid">{validation.errors.orderId}</FormFeedback>
-                      ) : null}
-                    </div>
-                    <div className="mb-3">
-                      <Label className="form-label">Billing Name</Label>
-                      <Input
-                        name="billingName"
-                        type="text"
-                        placeholder="Insert Billing Name"
+                      <Label className="form-label">
+                        Billing Name
+                      </Label>
+                      {/* <Select
+                                                validate={{
+                                                  required: { value: true },
+                                                }}
+                                                onBlur={validation.handleBlur}
+                                                invalid={
+                                                  validation.touched
+                                                    .billingName &&
+                                                  validation.errors.billingName
+                                                    ? true
+                                                    : false
+                                                }
+                                                noOptionsMessage={() => (
+                                                  <div
+                                                    className=""
+                                                    onClick={toggleNested}
+                                                    style={{
+                                                      cursor: "pointer",
+                                                    }}
+                                                  >
+                                                    <i className="mdi mdi-plus me-1" />
+                                                    Add New Customer
+                                                  </div>
+                                                )}
+                                                onChange={selectedValue => {
+                                                  validation.setFieldValue(
+                                                    "billingName",
+                                                    selectedValue
+                                                      ? selectedValue
+                                                      : {}
+                                                  );
+                                                }}
+                                                isClearable={true}
+                                                options={customerList}
+                                                value={
+                                                  validation.values.billingName
+                                                }
+                                              /> */}
+                      <Col lg="6">
+                        <Select
                         validate={{
                           required: { value: true },
                         }}
-                        onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
-                        value={validation.values.billingName || ""}
-                        invalid={
-                          validation.touched.billingName && validation.errors.billingName ? true : false
+                        value={
+                          validation.values.billingName
                         }
-                      />
-                      {validation.touched.billingName && validation.errors.billingName ? (
-                        <FormFeedback type="invalid">{validation.errors.billingName}</FormFeedback>
+                          noOptionsMessage={() => (
+                            <div
+                              className=""
+                              onClick={toggleNested}
+                              style={{
+                                cursor: "pointer",
+                              }}
+                            >
+                              <i className="mdi mdi-plus me-1" />
+                              Add New Customer
+                            </div>
+                          )}
+                          onChange={selectedValue => {
+                            validation.setFieldValue(
+                              "billingName",
+                              selectedValue
+                                ? selectedValue
+                                : {}
+                            );
+                          }}
+                          options={customerList}
+                          className="select2-selection"
+                        />
+                      </Col>
+                      {validation.errors.billingName ? (
+                        <div className="text-danger">
+                          {"Please select billing name"}
+                        </div>
                       ) : null}
                     </div>
-                    <div className="mb-3">
-                      <Label className="form-label">Order Date</Label>
-                      <Input
-                        name="orderdate"
-                        type="date"
-                        // value={orderList.orderdate || ""}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.orderdate || ""}
-                        invalid={
-                          validation.touched.orderdate && validation.errors.orderdate ? true : false
-                        }
-                      />
-                      {validation.touched.orderdate && validation.errors.orderdate ? (
-                        <FormFeedback type="invalid">{validation.errors.orderdate}</FormFeedback>
-                      ) : null}
+                    <Modal
+                      isOpen={nestedModal}
+                      toggle={toggleNested}
+                      onClosed={
+                        closeAll ? toggle : undefined
+                      }
+                    >
+                      <ModalHeader
+                        toggle={toggleNested}
+                        tag="h4"
+                      >
+                        Add Customer
+                      </ModalHeader>
+                      <ModalBody>
+                        <Form
+                          onSubmit={e => {
+                            e.preventDefault();
+                            validation2.handleSubmit();
+                            return false;
+                          }}
+                        >
+                          <Row form="true">
+                            <Col className="col-12">
+                              <div className="mb-3">
+                                <Label className="form-label">
+                                  UserName
+                                </Label>
+                                <Input
+                                  name="username"
+                                  type="text"
+                                  onChange={
+                                    validation2.handleChange
+                                  }
+                                  onBlur={
+                                    validation2.handleBlur
+                                  }
+                                  value={
+                                    validation2.values
+                                      .username || ""
+                                  }
+                                  invalid={
+                                    validation2.touched
+                                      .username &&
+                                      validation2.errors
+                                        .username
+                                      ? true
+                                      : false
+                                  }
+                                />
+                                {validation2.touched
+                                  .username &&
+                                  validation2.errors
+                                    .username ? (
+                                  <FormFeedback type="invalid">
+                                    {
+                                      validation2.errors
+                                        .username
+                                    }
+                                  </FormFeedback>
+                                ) : null}
+                              </div>
+
+                              <div className="mb-3">
+                                <Label className="form-label">
+                                  Phone No
+                                </Label>
+                                <Input
+                                  name="phone"
+                                  type="text"
+                                  onChange={
+                                    validation2.handleChange
+                                  }
+                                  onBlur={
+                                    validation2.handleBlur
+                                  }
+                                  value={
+                                    validation2.values
+                                      .phone || ""
+                                  }
+                                  invalid={
+                                    validation2.touched
+                                      .phone &&
+                                      validation2.errors
+                                        .phone
+                                      ? true
+                                      : false
+                                  }
+                                />
+                                {validation2.touched
+                                  .phone &&
+                                  validation2.errors
+                                    .phone ? (
+                                  <FormFeedback type="invalid">
+                                    {
+                                      validation2.errors
+                                        .phone
+                                    }
+                                  </FormFeedback>
+                                ) : null}
+                              </div>
+
+                              <div className="mb-3">
+                                <Label className="form-label">
+                                  Email Id
+                                </Label>
+                                <Input
+                                  name="email"
+                                  type="email"
+                                  onChange={
+                                    validation2.handleChange
+                                  }
+                                  onBlur={
+                                    validation2.handleBlur
+                                  }
+                                  value={
+                                    validation2.values
+                                      .email || ""
+                                  }
+                                  invalid={
+                                    validation2.touched
+                                      .email &&
+                                      validation2.errors
+                                        .email
+                                      ? true
+                                      : false
+                                  }
+                                />
+                                {validation2.touched
+                                  .email &&
+                                  validation2.errors
+                                    .email ? (
+                                  <FormFeedback type="invalid">
+                                    {
+                                      validation2.errors
+                                        .email
+                                    }
+                                  </FormFeedback>
+                                ) : null}
+                              </div>
+
+                              <div className="mb-3">
+                                <Label className="form-label">
+                                  Address
+                                </Label>
+                                <Input
+                                  name="address"
+                                  type="textarea"
+                                  rows="3"
+                                  onChange={
+                                    validation2.handleChange
+                                  }
+                                  onBlur={
+                                    validation2.handleBlur
+                                  }
+                                  value={
+                                    validation2.values
+                                      .address || ""
+                                  }
+                                  invalid={
+                                    validation2.touched
+                                      .address &&
+                                      validation2.errors
+                                        .address
+                                      ? true
+                                      : false
+                                  }
+                                />
+                                {validation2.touched
+                                  .address &&
+                                  validation2.errors
+                                    .address ? (
+                                  <FormFeedback type="invalid">
+                                    {
+                                      validation2.errors
+                                        .address
+                                    }
+                                  </FormFeedback>
+                                ) : null}
+                              </div>
+
+                              <div className="mb-3">
+                                <Label className="form-label">
+                                  Rating
+                                </Label>
+                                <Input
+                                  name="rating"
+                                  type="text"
+                                  onChange={
+                                    validation2.handleChange
+                                  }
+                                  onBlur={
+                                    validation2.handleBlur
+                                  }
+                                  value={
+                                    validation2.values
+                                      .rating || ""
+                                  }
+                                  invalid={
+                                    validation2.touched
+                                      .rating &&
+                                      validation2.errors
+                                        .rating
+                                      ? true
+                                      : false
+                                  }
+                                />
+                                {validation2.touched
+                                  .rating &&
+                                  validation2.errors
+                                    .rating ? (
+                                  <FormFeedback type="invalid">
+                                    {
+                                      validation2.errors
+                                        .rating
+                                    }
+                                  </FormFeedback>
+                                ) : null}
+                              </div>
+
+                              <div className="mb-3">
+                                <Label className="form-label">
+                                  Wallet Balance
+                                </Label>
+                                <Input
+                                  name="walletBalance"
+                                  type="text"
+                                  onChange={
+                                    validation2.handleChange
+                                  }
+                                  onBlur={
+                                    validation2.handleBlur
+                                  }
+                                  value={
+                                    validation2.values
+                                      .walletBalance ||
+                                    ""
+                                  }
+                                  invalid={
+                                    validation2.touched
+                                      .walletBalance &&
+                                      validation2.errors
+                                        .walletBalance
+                                      ? true
+                                      : false
+                                  }
+                                />
+                                {validation2.touched
+                                  .walletBalance &&
+                                  validation2.errors
+                                    .walletBalance ? (
+                                  <FormFeedback type="invalid">
+                                    {
+                                      validation2.errors
+                                        .walletBalance
+                                    }
+                                  </FormFeedback>
+                                ) : null}
+                              </div>
+
+                              <div className="mb-3">
+                                <Label className="form-label">
+                                  Joining Date
+                                </Label>
+                                <Input
+                                  name="joiningDate"
+                                  type="date"
+                                  onChange={
+                                    validation2.handleChange
+                                  }
+                                  onBlur={
+                                    validation2.handleBlur
+                                  }
+                                  value={
+                                    validation2.values
+                                      .joiningDate || ""
+                                  }
+                                  invalid={
+                                    validation2.touched
+                                      .joiningDate &&
+                                      validation2.errors
+                                        .joiningDate
+                                      ? true
+                                      : false
+                                  }
+                                />
+                                {validation2.touched
+                                  .joiningDate &&
+                                  validation2.errors
+                                    .joiningDate ? (
+                                  <FormFeedback type="invalid">
+                                    {
+                                      validation2.errors
+                                        .joiningDate
+                                    }
+                                  </FormFeedback>
+                                ) : null}
+                              </div>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>
+                              <div className="text-end">
+                                <button
+                                  type="submit"
+                                  className="btn btn-success save-customer"
+                                >
+                                  Save
+                                </button>
+                              </div>
+                            </Col>
+                          </Row>
+                        </Form>
+                      </ModalBody>
+                    </Modal>
+                    <Label className="form-label">
+                      Products
+                    </Label>
+                    <div>
+                      {validation.values.orderItems.map(
+                        (product, index) => (
+                          <div key={product._id}>
+                            <Row className="my-2">
+                              <Col className="col-6">
+                                {/* <Select
+                                                          value={{
+                                                            value:
+                                                              validation.values
+                                                                .orderItems[
+                                                                index
+                                                              ].product._id,
+                                                            label:
+                                                              validation.values
+                                                                .orderItems[
+                                                                index
+                                                              ].product.name,
+                                                          }}
+                                                          options={
+                                                            productOptions
+                                                          }
+                                                          onChange={selectedValue => {
+                                                            validation.setFieldValue(
+                                                              "orderItems",
+                                                              [
+                                                                ...validation.values.orderItems.slice(
+                                                                  0,
+                                                                  index
+                                                                ),
+                                                                {
+                                                                  product:
+                                                                    productList.filter(
+                                                                      product =>
+                                                                        product._id ===
+                                                                        selectedValue.value
+                                                                    )[0],
+                                                                  quantity:
+                                                                    validation
+                                                                      .values
+                                                                      .orderItems[
+                                                                      index
+                                                                    ].quantity,
+                                                                },
+                                                                ...validation.values.orderItems.slice(
+                                                                  index + 1,
+                                                                  validation
+                                                                    .values
+                                                                    .orderItems
+                                                                    .length
+                                                                ),
+                                                              ]
+                                                            );
+                                                          }}
+                                                        /> */}
+                                                        <Select
+                             value={{
+                              value:
+                                validation.values
+                                  .orderItems[
+                                  index
+                                ].product._id,
+                              label:
+                                validation.values
+                                  .orderItems[
+                                  index
+                                ].product.name,
+                            }}
+                            options={
+                              productOptions
+                            }
+                            onChange={selectedValue => {
+                              validation.setFieldValue(
+                                "orderItems",
+                                [
+                                  ...validation.values.orderItems.slice(
+                                    0,
+                                    index
+                                  ),
+                                  {
+                                    product:
+                                      productList.filter(
+                                        product =>
+                                          product._id ===
+                                          selectedValue.value
+                                      )[0],
+                                    quantity:
+                                      validation
+                                        .values
+                                        .orderItems[
+                                        index
+                                      ].quantity,
+                                  },
+                                  ...validation.values.orderItems.slice(
+                                    index + 1,
+                                    validation
+                                      .values
+                                      .orderItems
+                                      .length
+                                  ),
+                                ]
+                              );
+                            }}
+                          />
+                              </Col>
+                              <Col className="col-4">
+                                <Input
+                                  onChange={e => {
+                                    validation.setFieldValue(
+                                      "orderItems",
+                                      [
+                                        ...validation.values.orderItems.slice(
+                                          0,
+                                          index
+                                        ),
+                                        {
+                                          ...validation
+                                            .values
+                                            .orderItems[
+                                          index
+                                          ],
+                                          quantity:
+                                            parseInt(
+                                              e.target
+                                                .value
+                                            ),
+                                        },
+                                        ...validation.values.orderItems.slice(
+                                          index + 1,
+                                          validation
+                                            .values
+                                            .orderItems
+                                            .length
+                                        ),
+                                      ]
+                                    );
+                                  }}
+                                  value={
+                                    validation.values
+                                      .orderItems[index]
+                                      .quantity
+                                  }
+                                  type="number"
+                                  min="1"
+                                />
+                              </Col>
+                              <Col
+                                style={{
+                                  cursor: "pointer",
+                                }}
+                                className="text-danger mt-2"
+                                onClick={() => {
+                                  validation.setFieldValue(
+                                    "orderItems",
+                                    [
+                                      ...validation.values.orderItems.slice(
+                                        0,
+                                        index
+                                      ),
+                                      ...validation.values.orderItems.slice(
+                                        index + 1,
+                                        validation
+                                          .values
+                                          .orderItems
+                                          .length
+                                      ),
+                                    ]
+                                  );
+                                }}
+                              >
+                                Delete
+                              </Col>
+                            </Row>
+                          </div>
+                        )
+                      )}
+                      <div className="d-flex ">
+                        <Button
+                          className="mb-2"
+                          onClick={() => {
+                            validation.setFieldValue(
+                              "orderItems",
+                              [
+                                ...validation.values
+                                  .orderItems,
+                                {
+                                  quantity: 1,
+                                  product: {},
+                                },
+                              ]
+                            );
+                          }}
+                        >
+                          Add
+                        </Button>
+                        {validation.errors
+                          .orderItems ? (
+                          <div className="text-danger mx-2 mt-2">
+                            {typeof validation.errors
+                              .orderItems === "string"
+                              ? validation.errors
+                                .orderItems
+                              : "Invalid Product Specification"}
+                          </div>
+                        ) : null}
+                      </div>
                     </div>
                     <div className="mb-3">
-                      <Label className="form-label">Total</Label>
+                      <Label className="form-label">
+                        Address 1
+                      </Label>
                       <Input
-                        name="total"
+                        name="shippingAddress1"
                         type="text"
-                        placeholder="Insert Total Amount"
-                        onChange={validation.handleChange}
+                        validate={{
+                          required: { value: true },
+                        }}
+                        onChange={
+                          validation.handleChange
+                        }
                         onBlur={validation.handleBlur}
-                        value={validation.values.total || ""}
+                        value={
+                          validation.values
+                            .shippingAddress1 || ""
+                        }
                         invalid={
-                          validation.touched.total && validation.errors.total ? true : false
+                          validation.touched
+                            .shippingAddress1 &&
+                            validation.errors
+                              .shippingAddress1
+                            ? true
+                            : false
                         }
                       />
-                      {validation.touched.total && validation.errors.total ? (
-                        <FormFeedback type="invalid">{validation.errors.total}</FormFeedback>
+                      {validation.touched
+                        .shippingAddress1 &&
+                        validation.errors
+                          .shippingAddress1 ? (
+                        <FormFeedback type="invalid">
+                          {
+                            validation.errors
+                              .shippingAddress1
+                          }
+                        </FormFeedback>
+                      ) : null}
+                    </div>
+
+                    <div className="mb-3">
+                      <Label className="form-label">
+                        Address 2
+                      </Label>
+                      <Input
+                        name="shippingAddress2"
+                        type="text"
+                        validate={{
+                          required: { value: true },
+                        }}
+                        onChange={
+                          validation.handleChange
+                        }
+                        onBlur={validation.handleBlur}
+                        value={
+                          validation.values
+                            .shippingAddress2 || ""
+                        }
+                        invalid={
+                          validation.touched
+                            .shippingAddress2 &&
+                            validation.errors
+                              .shippingAddress2
+                            ? true
+                            : false
+                        }
+                      />
+                      {validation.touched
+                        .shippingAddress2 &&
+                        validation.errors
+                          .shippingAddress2 ? (
+                        <FormFeedback type="invalid">
+                          {
+                            validation.errors
+                              .shippingAddress2
+                          }
+                        </FormFeedback>
+                      ) : null}
+                    </div>
+
+                    <div className="mb-3">
+                      <Label className="form-label">
+                        City
+                      </Label>
+                      <Input
+                        name="city"
+                        type="text"
+                        validate={{
+                          required: { value: true },
+                        }}
+                        onChange={
+                          validation.handleChange
+                        }
+                        onBlur={validation.handleBlur}
+                        value={
+                          validation.values.city || ""
+                        }
+                        invalid={
+                          validation.touched.city &&
+                            validation.errors.city
+                            ? true
+                            : false
+                        }
+                      />
+                      {validation.touched.city &&
+                        validation.errors.city ? (
+                        <FormFeedback type="invalid">
+                          {validation.errors.city}
+                        </FormFeedback>
+                      ) : null}
+                    </div>
+
+                    <div className="mb-3">
+                      <Label className="form-label">
+                        State
+                      </Label>
+                      <Input
+                        name="state"
+                        type="text"
+                        validate={{
+                          required: { value: true },
+                        }}
+                        onChange={
+                          validation.handleChange
+                        }
+                        onBlur={validation.handleBlur}
+                        value={
+                          validation.values.state || ""
+                        }
+                        invalid={
+                          validation.touched.state &&
+                            validation.errors.state
+                            ? true
+                            : false
+                        }
+                      />
+                      {validation.touched.state &&
+                        validation.errors.state ? (
+                        <FormFeedback type="invalid">
+                          {validation.errors.state}
+                        </FormFeedback>
+                      ) : null}
+                    </div>
+
+                    <div className="mb-3">
+                      <Label className="form-label">
+                        Country
+                      </Label>
+                      <Input
+                        name="country"
+                        type="text"
+                        validate={{
+                          required: { value: true },
+                        }}
+                        onChange={
+                          validation.handleChange
+                        }
+                        onBlur={validation.handleBlur}
+                        value={
+                          validation.values.country ||
+                          ""
+                        }
+                        invalid={
+                          validation.touched.country &&
+                            validation.errors.country
+                            ? true
+                            : false
+                        }
+                      />
+                      {validation.touched.country &&
+                        validation.errors.country ? (
+                        <FormFeedback type="invalid">
+                          {validation.errors.country}
+                        </FormFeedback>
                       ) : null}
                     </div>
                     <div className="mb-3">
-                      <Label className="form-label">Payment Status</Label>
+                      <Label className="form-label">
+                        Phone
+                      </Label>
+                      <Input
+                        name="phone"
+                        type="text"
+                        validate={{
+                          required: { value: true },
+                        }}
+                        onChange={
+                          validation.handleChange
+                        }
+                        onBlur={validation.handleBlur}
+                        value={
+                          validation.values.phone || ""
+                        }
+                        invalid={
+                          validation.touched.phone &&
+                            validation.errors.phone
+                            ? true
+                            : false
+                        }
+                      />
+                      {validation.touched.phone &&
+                        validation.errors.phone ? (
+                        <FormFeedback type="invalid">
+                          {validation.errors.phone}
+                        </FormFeedback>
+                      ) : null}
+                    </div>
+
+                    <div className="mb-3">
+                      <Label className="form-label">
+                        Payment Status
+                      </Label>
                       <Input
                         name="paymentStatus"
                         type="select"
                         className="form-select"
-                        onChange={validation.handleChange}
+                        onChange={
+                          validation.handleChange
+                        }
                         onBlur={validation.handleBlur}
                         value={
-                          validation.values.paymentStatus || ""
+                          validation.values
+                            .paymentStatus || ""
                         }
                       >
                         <option>Paid</option>
                         <option>Chargeback</option>
                         <option>Refund</option>
                       </Input>
-                      {validation.touched.paymentStatus && validation.errors.paymentStatus ? (
-                        <FormFeedback type="invalid">{validation.errors.paymentStatus}</FormFeedback>
+                      {validation.touched
+                        .paymentStatus &&
+                        validation.errors
+                          .paymentStatus ? (
+                        <FormFeedback type="invalid">
+                          {
+                            validation.errors
+                              .paymentStatus
+                          }
+                        </FormFeedback>
                       ) : null}
                     </div>
+
                     <div className="mb-3">
-                      <Label className="form-label">Badge Class</Label>
+                      <Label className="form-label">
+                        Zip
+                      </Label>
+                      <Input
+                        name="zip"
+                        type="text"
+                        validate={{
+                          required: { value: true },
+                        }}
+                        onChange={
+                          validation.handleChange
+                        }
+                        onBlur={validation.handleBlur}
+                        value={
+                          validation.values.zip || ""
+                        }
+                        invalid={
+                          validation.touched.zip &&
+                            validation.errors.zip
+                            ? true
+                            : false
+                        }
+                      />
+                      {validation.touched.zip &&
+                        validation.errors.zip ? (
+                        <FormFeedback type="invalid">
+                          {validation.errors.zip}
+                        </FormFeedback>
+                      ) : null}
+                    </div>
+
+                    <div className="mb-3">
+                      <Label className="form-label">
+                        Badge Class
+                      </Label>
                       <Input
                         name="badgeclass"
                         type="select"
                         className="form-select"
-                        onChange={validation.handleChange}
+                        onChange={
+                          validation.handleChange
+                        }
                         onBlur={validation.handleBlur}
-                        value={validation.values.badgeclass || ""}
+                        value={
+                          validation.values
+                            .badgeclass || ""
+                        }
                       >
                         <option>success</option>
                         <option>danger</option>
@@ -609,15 +1415,20 @@ function EcommerceOrder() {
                       </Input>
                     </div>
                     <div className="mb-3">
-                      <Label className="form-label">Payment Method</Label>
+                      <Label className="form-label">
+                        Payment Method
+                      </Label>
                       <Input
                         name="paymentMethod"
                         type="select"
                         className="form-select"
-                        onChange={validation.handleChange}
+                        onChange={
+                          validation.handleChange
+                        }
                         onBlur={validation.handleBlur}
                         value={
-                          validation.values.paymentMethod || ""
+                          validation.values
+                            .paymentMethod || ""
                         }
                       >
                         <option>Mastercard</option>
@@ -634,6 +1445,16 @@ function EcommerceOrder() {
                       <button
                         type="submit"
                         className="btn btn-success save-user"
+                        onClick={() => {
+                          validation.setFieldTouched(
+                            "billingName",
+                            true
+                          );
+                          validation.setFieldTouched(
+                            "orderItems",
+                            true
+                          );
+                        }}
                       >
                         Save
                       </button>

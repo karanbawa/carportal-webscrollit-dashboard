@@ -19,42 +19,33 @@ import Dropzone from "react-dropzone";
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 
+// function handleAcceptedFiles(files) {
+//   files.map(file =>
+//     Object.assign(file, {
+//       preview: URL.createObjectURL(file),
+//       formattedSize: formatBytes(file.size),
+//     })
+//   )
+
+//   setselectedFiles(files)
+// }
+
+// function formatBytes(bytes, decimals = 2) {
+//   if (bytes === 0) return "0 Bytes"
+//   const k = 1024
+//   const dm = decimals < 0 ? 0 : decimals
+//   const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+
+//   const i = Math.floor(Math.log(bytes) / Math.log(k))
+//   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
+// }
+
 const EcommerceAddProduct = () => {
   
   //meta title
   document.title = "Add Product | Scrollit";
 
-  const [selectedFiles, setselectedFiles] = useState([])
-
-  const options = [
-    { value: "AK", label: "Alaska" },
-    { value: "HI", label: "Hawaii" },
-    { value: "CA", label: "California" },
-    { value: "NV", label: "Nevada" },
-    { value: "OR", label: "Oregon" },
-    { value: "WA", label: "Washington" },
-  ]
-
-  function handleAcceptedFiles(files) {
-    files.map(file =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-        formattedSize: formatBytes(file.size),
-      })
-    )
-
-    setselectedFiles(files)
-  }
-
-  function formatBytes(bytes, decimals = 2) {
-    if (bytes === 0) return "0 Bytes"
-    const k = 1024
-    const dm = decimals < 0 ? 0 : decimals
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
-  }
+  
 
   return (
     <React.Fragment>

@@ -37,6 +37,7 @@ import {
   UPDATE_PRODUCT_IN_LIST_FAIL,
   DELETE_PRODUCT_IN_LIST_SUCCESS,
   DELETE_PRODUCT_IN_LIST_FAIL,
+  IMPORT_CUSTOMERS_SUCCESS,
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -144,7 +145,7 @@ const Ecommerce = (state = INIT_STATE, action) => {
     case ADD_ORDER_SUCCESS:
       return {
         ...state,
-        orders: [...state.orders, action.payload],
+        orders: [...state.orders, action.payload.order],
       };
 
     case ADD_ORDER_FAIL:
@@ -161,6 +162,11 @@ const Ecommerce = (state = INIT_STATE, action) => {
             ? { order, ...action.payload }
             : order
         ),
+      };
+      case IMPORT_CUSTOMERS_SUCCESS:
+      return {
+        ...state,
+        customers: [...state.customers, ...action.payload.customers],
       };
 
     case UPDATE_ORDER_FAIL:
@@ -239,7 +245,7 @@ const Ecommerce = (state = INIT_STATE, action) => {
       return {
         ...state,
         customers: state.customers.filter(
-          customer => customer.id.toString() !== action.payload.toString()
+          customer => customer._id.toString() !== action.payload.toString()
         ),
       };
 

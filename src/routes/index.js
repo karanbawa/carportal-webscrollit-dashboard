@@ -170,6 +170,7 @@ import EcommerceBuyDomain from "pages/Ecommerce/EcommerceGetDomain/EcommerceBuyD
 import DomainPaymentStatus from "pages/Ecommerce/EcommerceGetDomain/DomainPaymentStatus";
 import BroughtDomain from "pages/Ecommerce/EcommerceGetDomain/BroughtDomain";
 import EcommerceCustomerDetail from "pages/Ecommerce/EcommerceOrders/EcommerceCustomerDetail";
+import Invoice from "pages/Invoices/Invoice";
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -191,6 +192,10 @@ const authProtectedRoutes = [
   {
     path: "/ecommerce-customer-detail/:id",
     component: <EcommerceCustomerDetail />,
+  },
+  {
+    path: "/invoice",
+    component: <Invoice />,
   },
 
 
