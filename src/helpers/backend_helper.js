@@ -8,6 +8,9 @@ const postRegister = data => post(url.POST_REGISTER, data);
 //login
 const postLogin = data => post(url.POST_LOGIN, data);
 
+// Edit profile
+const putJwtProfile = data => put(`${url.PUT_USER_PROFILE}/${data.id}`, data.user);
+
 //dashboard
 const getTotalOrdersCountData = () => get(url.GET_ORDERS_COUNT_DATA);
 const getTotalRevenueCountData = () => get(url.GET_REVENUE_TOTAL_DATA);
@@ -137,9 +140,13 @@ export const getInvoiceDetail = id =>
 
 
 
+
+
+
 export {
   postRegister,
   postLogin,
+  putJwtProfile,
   getTotalOrdersCountData,
   getTotalRevenueCountData,
   getOrderTotalAveragePriceApi,

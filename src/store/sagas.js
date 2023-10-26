@@ -23,6 +23,7 @@ import dashboardBlogSaga from "./dashboard-blog/saga";
 import dashboardJobSaga from "./dashboard-jobs/saga";
 import collectionSaga from "./collections/saga";
 import domainSaga from "./domain/saga";
+import carBrandSaga from "./automobiles/carbrands/saga";
 
 export default function* rootSaga() {
   yield all([
@@ -48,6 +49,7 @@ export default function* rootSaga() {
     fork(dashboardCryptoSaga),
     fork(dashboardBlogSaga),
     fork(dashboardJobSaga),
-    fork(domainSaga)
+    fork(domainSaga),
+    fork(carBrandSaga)
   ]);
 }

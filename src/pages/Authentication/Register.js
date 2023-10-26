@@ -60,7 +60,7 @@ const Register = props => {
     }),
     onSubmit: (values) => {
       const { confirmPassword, ...data } = values;
-      dispatch(registerUser(data));      
+      dispatch(registerUser(data));  
     }
   });
 
@@ -73,6 +73,13 @@ const Register = props => {
   useEffect(() => {
     dispatch(apiError(""));
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      validation.resetForm();
+    }
+  }, [user, validation]);
+  
 
   return (
     <React.Fragment>

@@ -6,8 +6,8 @@ import apiKey from "./jwt-token-access/apiKey";
 // const token = accessToken;
 const apiKeys = apiKey;
 //apply base url for axios
-const API_URL = "https://api.univolenitsolutions.com";
-// const API_URL = "http://localhost:3005";
+// const API_URL = "https://api.univolenitsolutions.com";
+const API_URL = "http://localhost:3005";
 
 // const API_URL = "https://dummy.com";
 export const axiosApi = axios.create({
@@ -15,13 +15,13 @@ export const axiosApi = axios.create({
 });
 axiosApi.defaults.headers.common["x-api-key"] = apiKeys;
 
-// function authUserItem() {
-//   axiosApi.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(localStorage.getItem('authUser'))?.data?.tokens?.accessToken}`;
-// }
-
 function authUserItem() {
-  axiosApi.defaults.headers.common["Authorization"] = accessToken;
+  axiosApi.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(localStorage.getItem('authUser'))?.data?.tokens?.accessToken}`;
 }
+
+// function authUserItem() {
+//   axiosApi.defaults.headers.common["Authorization"] = accessToken;
+// }
 
 axiosApi.interceptors.response.use(
   response => response,

@@ -7,13 +7,14 @@ import { profileSuccess, profileError } from "./actions"
 //Include Both Helper File with needed methods
 import { getFirebaseBackend } from "../../../helpers/firebase_helper"
 import {
-  postFakeProfile,
-  postJwtProfile,
+  postFakeProfile
 } from "../../../helpers/fakebackend_helper"
+import { putJwtProfile } from "helpers/backend_helper"
+import { showToastError, showToastSuccess } from "helpers/toastBuilder"
 
 const fireBaseBackend = getFirebaseBackend()
 
-function* editProfile({ payload: { user } }) {
+function* editProfile({ payload: { user, id } }) {
   try {
     if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
       const response = yield call(
@@ -23,11 +24,12 @@ function* editProfile({ payload: { user } }) {
       )
       yield put(profileSuccess(response))      
     } else if (process.env.REACT_APP_DEFAULTAUTH === "jwt") {
-      const response = yield call(postJwtProfile, "/post-jwt-profile", {
-        username: user.username,
-        idx: user.idx,
+      const response = yield call(putJwtProfile, {
+        user,
+        id
       })
-      yield put(profileSuccess(response))
+      yield put(profileSuccess(response));
+      showToastSuccess("User Profile updated successfully","Success")
     } else if (process.env.REACT_APP_DEFAULTAUTH === "fake") {
       const response = yield call(postFakeProfile, {
         username: user.username,
@@ -37,6 +39,7 @@ function* editProfile({ payload: { user } }) {
     }
   } catch (error) {
     yield put(profileError(error))
+    showToastError("User profile failed to update","Error")
   }
 }
 export function* watchProfile() {

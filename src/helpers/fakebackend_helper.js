@@ -51,9 +51,6 @@ const postFakeLogin = data => post(url.POST_FAKE_LOGIN, data);
 // postForgetPwd
 const postFakeForgetPwd = data => post(url.POST_FAKE_PASSWORD_FORGET, data);
 
-// Edit profile
-const postJwtProfile = data => post(url.POST_EDIT_JWT_PROFILE, data);
-
 const postFakeProfile = data => post(url.POST_EDIT_PROFILE, data);
 
 // Register Method
@@ -308,7 +305,6 @@ export {
   postJwtRegister,
   postJwtLogin,
   postJwtForgetPwd,
-  postJwtProfile,
   getProductComents,
   onLikeComment,
   onLikeReply,

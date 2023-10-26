@@ -4,6 +4,9 @@ export const POST_REGISTER = "/v1/signup/basic";
 //Login
 export const POST_LOGIN = "/v1/login/basic";
 
+// Update User Profile
+export const PUT_USER_PROFILE = "/v1/profile/user/update"
+
 // dashboard
 export const GET_ORDERS_COUNT_DATA = "/v1/orders/get/totalorders";
 export const GET_REVENUE_TOTAL_DATA = "/v1/orders/get/totalrevenue";

@@ -4,7 +4,6 @@ import {
   Row,
   Col,
   Card,
-  Alert,
   CardBody,
   Button,
   Label,
@@ -36,7 +35,9 @@ const UserProfile = () => {
   const dispatch = useDispatch();
 
   const [email, setemail] = useState("");
-  const [name, setname] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [idx, setidx] = useState(1);
 
   const { error, success } = useSelector(state => ({
@@ -55,9 +56,11 @@ const UserProfile = () => {
         process.env.REACT_APP_DEFAULTAUTH === "fake" ||
         process.env.REACT_APP_DEFAULTAUTH === "jwt"
       ) {
-        setname(obj.username);
-        setemail(obj.email);
-        setidx(obj.uid);
+        setFirstName(obj.data.user.firstName);
+        setLastName(obj.data.user.lastName);
+        setemail(obj.data.user.email);
+        setPhoneNumber(obj.data.user.phoneNumber);
+        setidx(obj.data.user._id);
       }
       const timer = setTimeout(() => {
         dispatch(resetProfileFlag());
@@ -74,16 +77,36 @@ const UserProfile = () => {
     enableReinitialize: true,
 
     initialValues: {
-      username: name || '',
+      firstName: firstName || '',
+      lastName: lastName || '',
+      email: email || '',
+      phoneNumber: phoneNumber || '',
       idx: idx || '',
     },
     validationSchema: Yup.object({
-      username: Yup.string().required("Please Enter Your UserName"),
+      firstName: Yup.string().required("Please Enter Your First Name"),
+      lastName: Yup.string().required("Please Enter Your Last Name"),
+      phoneNumber: Yup.string().required("Please Enter Your Phone Number"),
     }),
     onSubmit: (values) => {
-      dispatch(editProfile(values));
+      const newProfileRecord = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        phoneNumber: String(values.phoneNumber)
+      }
+      dispatch(editProfile(newProfileRecord, values.idx));
     }
   });
+
+  useEffect(() => {
+    if(success) {
+      const user = JSON.parse(localStorage.getItem('authUser'));
+      user.data.user.firstName = success.data.user.firstName;
+      user.data.user.lastName = success.data.user.lastName;
+      user.data.user.phoneNumber = success.data.user.phoneNumber;
+      localStorage.setItem('authUser', JSON.stringify(user));
+    }
+  }, [success]);
 
 
   return (
@@ -95,9 +118,6 @@ const UserProfile = () => {
 
           <Row>
             <Col lg="12">
-              {error && error ? <Alert color="danger">{error}</Alert> : null}
-              {success ? <Alert color="success">{success}</Alert> : null}
-
               <Card>
                 <CardBody>
                   <div className="d-flex">
@@ -134,28 +154,90 @@ const UserProfile = () => {
                 }}
               >
                 <div className="form-group">
-                  <Label className="form-label">User Name</Label>
+                  <Label className="form-label">First Name</Label>
                   <Input
-                    name="username"
+                    name="firstName"
                     // value={name}
                     className="form-control"
-                    placeholder="Enter User Name"
+                    placeholder="Enter First Name"
                     type="text"
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
-                    value={validation.values.username || ""}
+                    value={validation.values.firstName || ""}
                     invalid={
-                      validation.touched.username && validation.errors.username ? true : false
+                      validation.touched.firstName && validation.errors.firstName ? true : false
                     }
                   />
-                  {validation.touched.username && validation.errors.username ? (
-                    <FormFeedback type="invalid">{validation.errors.username}</FormFeedback>
+                  {validation.touched.firstName && validation.errors.firstName ? (
+                    <FormFeedback type="invalid">{validation.errors.firstName}</FormFeedback>
+                  ) : null}
+                  <Input name="idx" value={idx} type="hidden" />
+                </div>
+                <div className="form-group mt-3">
+                  <Label className="form-label">Last Name</Label>
+                  <Input
+                    name="lastName"
+                    // value={name}
+                    className="form-control"
+                    placeholder="Enter Last Name"
+                    type="text"
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.lastName || ""}
+                    invalid={
+                      validation.touched.lastName && validation.errors.lastName ? true : false
+                    }
+                  />
+                  {validation.touched.lastName && validation.errors.lastName ? (
+                    <FormFeedback type="invalid">{validation.errors.lastName}</FormFeedback>
+                  ) : null}
+                  <Input name="idx" value={idx} type="hidden" />
+                </div>
+                <div className="form-group mt-3">
+                  <Label className="form-label">Email</Label>
+                  <Input
+                    name="email"
+                    // value={name}
+                    className="form-control"
+                    placeholder="Enter Email"
+                    type="text"
+                    disabled
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.email || ""}
+                    invalid={
+                      validation.touched.email && validation.errors.email ? true : false
+                    }
+                  />
+                  {validation.touched.email && validation.errors.email ? (
+                    <FormFeedback type="invalid">{validation.errors.email}</FormFeedback>
+                  ) : null}
+                  <Input name="idx" value={idx} type="hidden" />
+                </div>
+                <div className="form-group mt-3">
+                  <Label className="form-label">Phone Number</Label>
+                  <Input
+                    name="phoneNumber"
+                    // value={name}
+                    className="form-control"
+                    placeholder="Enter Phone Number"
+                    type="text"
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.phoneNumber || ""}
+                    maxLength={10}
+                    invalid={
+                      validation.touched.phoneNumber && validation.errors.phoneNumber ? true : false
+                    }
+                  />
+                  {validation.touched.phoneNumber && validation.errors.phoneNumber ? (
+                    <FormFeedback type="invalid">{validation.errors.phoneNumber}</FormFeedback>
                   ) : null}
                   <Input name="idx" value={idx} type="hidden" />
                 </div>
                 <div className="text-center mt-4">
                   <Button type="submit" color="danger">
-                    Update User Name
+                    Update User Details
                   </Button>
                 </div>
               </Form>
