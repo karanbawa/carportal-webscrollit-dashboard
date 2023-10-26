@@ -237,7 +237,7 @@ function CarBrands() {
         }
       },
       {
-        Header: 'View Details',
+        Header: 'View Brand Models',
         accessor: 'view',
         disableFilters: true,
         Cell: (cellProps) => {
@@ -251,7 +251,7 @@ function CarBrands() {
                 setCatBrandData(cellProps.row.original);
               }}
             >
-              View Details
+              View Brand Models
             </Button>);
         }
       },
