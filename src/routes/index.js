@@ -173,6 +173,11 @@ import EcommerceCustomerDetail from "pages/Ecommerce/EcommerceOrders/EcommerceCu
 import Invoice from "pages/Invoices/Invoice";
 import CarBrands from "pages/Automobile/CarBrands/CarBrands";
 import CarModels from "pages/Automobile/CarModels/CarModels";
+import CarVariants from "pages/Automobile/CarVariants/CarVariants";
+import AddCarVariant from "pages/Automobile/CarVariants/AddCarVariant";
+import AutomobileCollections from "pages/Automobile/AutomobileCollections";
+import AddCarCollection from "pages/Automobile/AutomobileCollections/AddCarCollection";
+import CarModelCollectionDetails from "pages/Automobile/AutomobileCollections/CarModelCollectionDetails";
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -183,11 +188,13 @@ const authProtectedRoutes = [
   { path: "/ecomm-Domain-paymentStatus/:id", component: <DomainPaymentStatus /> },
   { path: "/ecommerce-your-domains", component: <BroughtDomain /> },
 
-  { path: "/ecommerce-collections", component: <EcommerceCollections /> },
-  { path: "/ecommerce-create-collection", component: <AddCollection /> },
+  // { path: "/ecommerce-collections", component: <EcommerceCollections /> },
+  // { path: "/ecommerce-create-collection", component: <AddCollection /> },
+  { path: "/automobile-collections", component: <AutomobileCollections /> },
+  { path: "/automobile-create-collection", component: <AddCarCollection /> },
   {
-    path: "/ecommerce-collection-details/:_id",
-    component: <EcommerceCollectionDetails />,
+    path: "/automobile-collection-details/:_id",
+    component: <CarModelCollectionDetails />,
   },
   { path: "/ecommerce-product-list", component: <EcommerceProductList /> },
 
@@ -202,9 +209,9 @@ const authProtectedRoutes = [
 
 
   { path: "/dashboard-saas", component: <DashboardSaas /> },
-  { path: "/dashboard-crypto", component: <DashboardCrypto /> },
+  // { path: "/dashboard-crypto", component: <DashboardCrypto /> },
   { path: "/blog", component: <Blog /> },
-  { path: "/dashboard-job", component: <DashboardJob /> },
+  // { path: "/dashboard-job", component: <DashboardJob /> },
 
   // //Crypto
   // { path: "/crypto-wallet", component: <CryptoWallet /> },
@@ -215,13 +222,13 @@ const authProtectedRoutes = [
   // { path: "/crypto-kyc-application", component: <CryptoKYCApplication /> },
 
   //chat
-  { path: "/chat", component: <Chat /> },
+  // { path: "/chat", component: <Chat /> },
 
   //File Manager
-  { path: "/apps-filemanager", component: <FileManager /> },
+  // { path: "/apps-filemanager", component: <FileManager /> },
 
   // //calendar
-  { path: "/calendar", component: <Calendar /> },
+  // { path: "/calendar", component: <Calendar /> },
 
   // //profile
   { path: "/profile", component: <UserProfile /> },
@@ -230,22 +237,26 @@ const authProtectedRoutes = [
 
   { path: "/car-models", component: <CarModels /> },
 
+  { path: "/car-variants", component: <CarVariants /> },
+
+  { path: "/add-car-variant", component: <AddCarVariant /> },
+
   //Ecommerce
-  { path: "/ecommerce-product-detail/:id", component: <EcommerceProductDetail /> },
-  { path: "/ecommerce-products", component: <EcommerceProducts /> },
-  { path: "/ecommerce-orders", component: <EcommerceOrders /> },
-  { path: "/ecommerce-customers", component: <EcommerceCustomers /> },
-  { path: "/ecommerce-cart", component: <EcommerceCart /> },
-  { path: "/ecommerce-checkout", component: <EcommerceCheckout /> },
-  { path: "/ecommerce-shops", component: <EcommerceShops /> },
-  { path: "/ecommerce-add-product", component: <EcommerceAddProduct /> },
+  // { path: "/ecommerce-product-detail/:id", component: <EcommerceProductDetail /> },
+  // { path: "/ecommerce-products", component: <EcommerceProducts /> },
+  // { path: "/ecommerce-orders", component: <EcommerceOrders /> },
+  // { path: "/ecommerce-customers", component: <EcommerceCustomers /> },
+  // { path: "/ecommerce-cart", component: <EcommerceCart /> },
+  // { path: "/ecommerce-checkout", component: <EcommerceCheckout /> },
+  // { path: "/ecommerce-shops", component: <EcommerceShops /> },
+  // { path: "/ecommerce-add-product", component: <EcommerceAddProduct /> },
 
   //Email
-  { path: "/email-inbox", component: <EmailInbox /> },
-  { path: "/email-read", component: <EmailRead /> },
-  { path: "/email-template-basic", component: <EmailBasicTemplte /> },
-  { path: "/email-template-alert", component: <EmailAlertTemplte /> },
-  { path: "/email-template-billing", component: <EmailTemplateBilling /> },
+  // { path: "/email-inbox", component: <EmailInbox /> },
+  // { path: "/email-read", component: <EmailRead /> },
+  // { path: "/email-template-basic", component: <EmailBasicTemplte /> },
+  // { path: "/email-template-alert", component: <EmailAlertTemplte /> },
+  // { path: "/email-template-billing", component: <EmailTemplateBilling /> },
 
   //Invoices
   { path: "/invoices-list", component: <InvoicesList /> },
@@ -264,9 +275,9 @@ const authProtectedRoutes = [
   { path: "/projects-create", component: <ProjectsCreate /> },
 
   //Blog
-  { path: "/blog-list", component: <BlogList /> },
-  { path: "/blog-grid", component: <BlogGrid /> },
-  { path: "/blog-details", component: <BlogDetails /> },
+  // { path: "/blog-list", component: <BlogList /> },
+  // { path: "/blog-grid", component: <BlogGrid /> },
+  // { path: "/blog-details", component: <BlogDetails /> },
 
   //job
   { path: "/job-grid", component: <JobGrid /> },
@@ -278,9 +289,9 @@ const authProtectedRoutes = [
   { path: "/candidate-overview", component: <CandidateOverview /> },
 
   // Contacts
-  { path: "/contacts-grid", component: <ContactsGrid /> },
-  { path: "/contacts-list", component: <ContactsList /> },
-  { path: "/contacts-profile", component: <ContactsProfile /> },
+  // { path: "/contacts-grid", component: <ContactsGrid /> },
+  // { path: "/contacts-list", component: <ContactsList /> },
+  // { path: "/contacts-profile", component: <ContactsProfile /> },
 
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },

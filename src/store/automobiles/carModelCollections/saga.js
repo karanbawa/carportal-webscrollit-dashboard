@@ -2,12 +2,6 @@ import { call, put, takeEvery } from "redux-saga/effects";
 
 // Collection Redux States
 import {
-  GET_COLLECTIONS,
-  ADD_COLLECTION,
-  UPDATE_COLLECTION,
-  DELETE_COLLECTION,
-} from "./actionTypes";
-import {
   getCollectionsSuccess,
   getCollectionsFail,
   updateCollectionSuccess,
@@ -16,6 +10,8 @@ import {
   deleteCollectionFail,
   addCollectionSuccess,
   addCollectionFail,
+  getCarModelCollectionsFail,
+  getCarModelCollectionsSuccess,
 } from "./action";
 
 import {
@@ -26,46 +22,43 @@ import {
   getProductList,
 } from "helpers/backend_helper";
 import { showToastError, showToastSuccess } from "helpers/toastBuilder";
+import { ADD_CAR_MODEL_COLLECTION, DELETE_CAR_MODEL_COLLECTION, GET_CAR_MODEL_COLLECTIONS, UPDATE_CAR_MODEL_COLLECTION } from "./actionTypes";
 import { getCarModelsList } from "helpers/automobile_helper_apis";
 
 function* fetchCollections() {
   try {
-    const products = yield call(getProductList);
     const carModels = yield call(getCarModelsList);
-    console.log('carModels ', carModels);
     const response = yield call(getCollections);
     yield put(
-      getCollectionsSuccess([ 
+      getCarModelCollectionsSuccess([
         {
-          name: "All Products",
-          _id: "all-products",
+          name: "All Car Models",
+          _id: "all-carmodels",
           icon: "ballot",
           color: "#7A8D96",
-          products: products.data.products.map(product => product._id),
-          carModels: carModels.data.carModelsList.map(carModel => carModel._id)
+          carModels: carModels.data.carModels.map(carModel => carModel._id),
         },
         ...response.data,
       ])
     );
   } catch (error) {
-    yield put(getCollectionsFail);
+    yield put(getCarModelCollectionsFail);
   }
 }
 
-function* onUpdateCollection({ payload: { collection, history } }) {
+function* onUpdateCollection({ payload: { collection, history, url } }) {
   try {
     const config = {
       headers: { "content-type": "multipart/form-data" },
     };
-    console.log('collections ', collection.getAll('carModels[]'));
     const response = yield call(updateCollection, collection, config);
     yield put(updateCollectionSuccess(response.data));
     showToastSuccess("Collection Updated successfully", "Success");
-    history("/ecommerce-collections");
+    history(url);
   } catch (error) {
     yield put(updateCollectionFail(error));
     showToastError("Sorry! Failed to update the collection", "Error");
-    history("/ecommerce-collections");
+    history(url);
   }
 }
 
@@ -82,9 +75,8 @@ function* onDeleteCollection({ payload: { collectionId, history } }) {
   }
 }
 
-function* onAddCollection({ payload: { collection, history, url } }) {
+function* onAddCollection({ payload: { collection, history } }) {
   try {
-    console.log('url ',url);
     const config = {
       headers: { "content-type": "multipart/form-data" },
     };
@@ -92,7 +84,7 @@ function* onAddCollection({ payload: { collection, history, url } }) {
     const response = yield call(addCollection, collection, config);
     yield put(addCollectionSuccess(response));
     showToastSuccess("Collection Added successfully", "Success");
-    history(url);
+    history("/ecommerce-collections");
   } catch (error) {
     yield put(addCollectionFail(error));
     showToastError("Sorry! Failed to Add the collection", "Error");
@@ -100,10 +92,10 @@ function* onAddCollection({ payload: { collection, history, url } }) {
 }
 
 function* collectionSaga() {
-  yield takeEvery(ADD_COLLECTION, onAddCollection);
-  yield takeEvery(GET_COLLECTIONS, fetchCollections);
-  yield takeEvery(UPDATE_COLLECTION, onUpdateCollection);
-  yield takeEvery(DELETE_COLLECTION, onDeleteCollection);
+  yield takeEvery(ADD_CAR_MODEL_COLLECTION, onAddCollection);
+  yield takeEvery(GET_CAR_MODEL_COLLECTIONS, fetchCollections);
+  yield takeEvery(UPDATE_CAR_MODEL_COLLECTION, onUpdateCollection);
+  yield takeEvery(DELETE_CAR_MODEL_COLLECTION, onDeleteCollection);
 }
 
 export default collectionSaga;

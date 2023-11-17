@@ -120,22 +120,22 @@ const Header = props => {
               </div>
             </form>
 
-            <Dropdown
+            {/* <Dropdown
               className="dropdown-mega d-none d-lg-block ms-2"
               isOpen={megaMenu}
               toggle={() => {
                 setmegaMenu(!megaMenu);
               }}
-            >
-              <DropdownToggle
+            > */}
+              {/* <DropdownToggle
                 className="btn header-item "
                 caret
                 tag="button"
               >
                 {" "}
                 {props.t("Mega Menu")} <i className="mdi mdi-chevron-down" />
-              </DropdownToggle>
-              <DropdownMenu className="dropdown-megamenu">
+              </DropdownToggle> */}
+              {/* <DropdownMenu className="dropdown-megamenu">
                 <Row>
                   <Col sm={8}>
                     <Row>
@@ -268,7 +268,7 @@ const Header = props => {
                   </Col>
                 </Row>
               </DropdownMenu>
-            </Dropdown>
+            </Dropdown> */}
           </div>
           <div className="d-flex">
             <div className="dropdown d-inline-block d-lg-none ms-2">
@@ -310,8 +310,8 @@ const Header = props => {
               </div>
             </div>
 
-            <LanguageDropdown />
-
+            {/* <LanguageDropdown /> */}
+{/* 
             <Dropdown
               className="d-none d-lg-inline-block ms-1"
               isOpen={socialDrp}
@@ -370,7 +370,7 @@ const Header = props => {
                   </Row>
                 </div>
               </DropdownMenu>
-            </Dropdown>
+            </Dropdown> */}
 
             <div className="dropdown d-none d-lg-inline-block ms-1">
               <button
@@ -385,10 +385,10 @@ const Header = props => {
               </button>
             </div>
 
-            <NotificationDropdown />
+            {/* <NotificationDropdown /> */}
             <ProfileMenu />
 
-            <div
+            {/* <div
                onClick={() => {
                 props.showRightSidebarAction(!props.showRightSidebar);
               }}
@@ -400,7 +400,7 @@ const Header = props => {
               >
                 <i className="bx bx-cog bx-spin" />
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </header>

@@ -60,6 +60,8 @@ import DashboardJob from "./dashboard-jobs/reducer";
 import domain from "./domain/reducer";
 
 import CarBrand from "./automobiles/carbrands/reducer";
+import CarModel from "./automobiles/carModels/reducer";
+import CarVariant from "./automobiles/carVariants/reducer";
 
 const rootReducer = combineReducers({
   // public
@@ -85,7 +87,9 @@ const rootReducer = combineReducers({
   DashboardBlog,
   DashboardJob,
   domain,
-  CarBrand
+  CarBrand,
+  CarModel,
+  CarVariant
 });
 
 export default rootReducer;

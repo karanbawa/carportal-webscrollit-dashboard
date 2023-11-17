@@ -43,16 +43,17 @@ import { useEffect } from "react";
 import { CirclePicker, SketchPicker } from "react-color";
 import IconSelector from "./IconSelector";
 import { getCollections, deleteCollection, updateCollection } from "store/collections/action";
+import { getCarModels } from "store/automobiles/carModels/actions";
 
-export default function EcommerceCollectionDetails() {
+export default function CarModelCollectionDetails() {
   const dispatch = useDispatch();
   const history = useNavigate();
   const { _id } = useParams();
 
-  // Getting collections and products from store
-  const { collections, products } = useSelector(state => ({
+  // Getting collections and carModels from store
+  const { collections, carModels } = useSelector(state => ({
     collections: state.collection.collections,
-    products: state.ecommerce.productList,
+    carModels: state.CarModel.carModels,
   }));
 
   //states for Modals
@@ -67,7 +68,7 @@ export default function EcommerceCollectionDetails() {
   const toggleToast = () => setToast(!toast);
 
   //states for data
-  const [productList, setProductList] = useState([]);
+  const [carModelList, setCarModelList] = useState([]);
 
   // Getting page specific collection from collections
   const collection = collections?.filter(collection => collection._id === _id)[0];
@@ -80,8 +81,8 @@ export default function EcommerceCollectionDetails() {
     collection ? collection.image : ""
   );
   const [collectionImageUrl, setCollectionImageUrl] = useState(collection ? collection?.media?.url : undefined);
-  const [collectionProductIds, setCollectionProductIds] = useState(
-    collection ? collection.products : []
+  const [collectionCarModelIds, setCollectionCarModelIds] = useState(
+    collection ? collection.carModels : []
   );
   const [collectionColor, setCollectionColor] = useState(
     collection ? collection.color : ""
@@ -90,14 +91,14 @@ export default function EcommerceCollectionDetails() {
     collection ? collection.icon : ""
   );
 
-  const [productsToAdd, setProductsToAdd] = useState([]);
+  const [carModelsToAdd, setCarModelsToAdd] = useState([]);
 
   // call APIs if products or collections is empty
   useEffect(() => {
-    if (!products?.length) {
-      dispatch(getProductList());
+    if (!carModels?.length) {
+      dispatch(getCarModels());
     }
-  }, [products]);
+  }, [carModels]);
 
   useEffect(() => {
     if (collections && !collections?.length) {
@@ -109,23 +110,23 @@ export default function EcommerceCollectionDetails() {
   useEffect(() => {
     if (!collection && _id !== "untitled-collection") {
       console.log('datacheck');
-      history("/ecommerce-collections");
+      history("/automobile-collections");
     }
-  }, [collection, products]);
+  }, [collection, carModels]);
 
   useEffect(() => {
-    setProductList(products);
+    setCarModelList(carModels);
   });
 
   useEffect(() => {
-    setProductsToAdd(
-      products?.filter(product => !collectionProductIds?.includes(product._id))
+    setCarModelsToAdd(
+      carModels?.filter(carModel => !collectionCarModelIds?.includes(carModel._id))
     );
-  }, [collectionProductIds, products]);
+  }, [collectionCarModelIds, carModels]);
 
   // updating products array after drag drop action
   const moveCollectionProductPreview = useCallback((dragIndex, hoverIndex) => {
-    setCollectionProductIds(prevCards =>
+    setCollectionCarModelIds(prevCards =>
       update(prevCards, {
         $splice: [
           [dragIndex, 1],
@@ -137,7 +138,7 @@ export default function EcommerceCollectionDetails() {
 
   // delete products in array
   const deleteCollectionProductPreview = useCallback(deleteIndex => {
-    setCollectionProductIds(prevCards =>
+    setCollectionCarModelIds(prevCards =>
       update(prevCards, {
         $splice: [[deleteIndex, 1]],
       })
@@ -146,7 +147,7 @@ export default function EcommerceCollectionDetails() {
 
   // rendering drag drop product cards
   const renderCollectionProductPreview = useCallback(
-    (collectionProduct, index, products) => {
+    (collectionProduct, index, carModels) => {
         // const prod = products?.find(product => product._id === collectionProduct._id);
         const prod = collectionProduct;
       return (
@@ -154,13 +155,11 @@ export default function EcommerceCollectionDetails() {
           key={prod?._id}
           index={index}
           id={prod?._id}
-          price={prod?.price}
-          img={prod?.media?.[0]?.url}
-          text={prod?.name}
+          img={prod?.media?.url}
+          text={prod?.modelName}
           moveCollectionProductPreview={moveCollectionProductPreview}
-          collectionProductIds={collectionProductIds}
           deleteCollectionProductPreview={deleteCollectionProductPreview}
-          mutable={collectionName !== "All Products"}
+          mutable={collectionName !== "All Car Models"}
         />
       );
     },
@@ -179,12 +178,14 @@ export default function EcommerceCollectionDetails() {
       }
       collection.append("color", collectionColor);
       collection.append("icon", collectionIcon);
-      collectionProductIds.forEach((productIds) => {
-        collection.append("products[]", productIds);
+      console.log('collectionCarModelIds ', collectionCarModelIds);
+      collectionCarModelIds.forEach((carModelId) => {
+        console.log('carModelIds ', carModelId);
+        collection.append("carModels[]", carModelId);
       });
       collection.append("_id", _id);
       dispatch(
-        updateCollection(collection, history, './ecommerce-collections')
+        updateCollection(collection, history, './automobile-collections')
       );
     } catch (error) {
       console.error(error);
@@ -232,12 +233,12 @@ export default function EcommerceCollectionDetails() {
               <Col>
                 <Row>
                   <Col>
-                    <Link to={"/ecommerce-collections"}>Collections</Link> &gt;{" "}
-                    {collection ? collection.name : "Untitled Product"}
+                    <Link to={"/automobile-collections"}>Collections</Link> &gt;{" "}
+                    {collection ? collection.name : "Untitled Car Model"}
                   </Col>
                 </Row>
                 <Row className="display-6 m-3">
-                  {collection ? collection.name : "Untitled Product"}
+                  {collection ? collection.name : "Untitled Car Model"}
                 </Row>
               </Col>
               <Col className="h-100">
@@ -299,7 +300,7 @@ export default function EcommerceCollectionDetails() {
                     <Col>
                       <Row>
                         <Col>
-                          <CardTitle>Products in Collection</CardTitle>
+                          <CardTitle>Car Models in Collection</CardTitle>
                         </Col>
                         <Col>
                           <Row>
@@ -309,7 +310,7 @@ export default function EcommerceCollectionDetails() {
                                 toggle1();
                               }}
                             >
-                              <i className="mdi mdi-plus" /> Add Products
+                              <i className="mdi mdi-plus" /> Add Car Models
                             </CardLink>
                           </Row>
                         </Col>
@@ -321,14 +322,14 @@ export default function EcommerceCollectionDetails() {
                     <DndProvider backend={HTML5Backend}>
                       <Row>
                         <CardGroup>
-                          {collectionProductIds?.map((id, i) => {
-                            const prod = products?.find(
-                              product => product._id === id
+                          {collectionCarModelIds?.map((id, i) => {
+                            const prod = carModels?.find(
+                              carModel => carModel._id === id
                             );
                             return renderCollectionProductPreview(
                               prod,
                               i,
-                              products
+                              carModels
                             );
                           })}
                         </CardGroup>
@@ -352,7 +353,7 @@ export default function EcommerceCollectionDetails() {
                         onChange={event => {
                           setCollectionName(event.target.value);
                         }}
-                        disabled={_id === "all-products"}
+                        disabled={_id === "all-carModels"}
                       />
                     </div>
                     <div className="m-1 mt-3">
@@ -498,7 +499,7 @@ export default function EcommerceCollectionDetails() {
                 color="danger"
                 onClick={() => {
                   toggle();
-                  history("/ecommerce-collections");
+                  history("/automobile-collections");
                 }}
               >
                 Discard Changes
@@ -506,36 +507,38 @@ export default function EcommerceCollectionDetails() {
             </ModalFooter>
           </Modal>
           <Modal isOpen={modal1} toggle={toggle1}>
-            <ModalHeader toggle={toggle1}>Add Products</ModalHeader>
+            <ModalHeader toggle={toggle1}>Add Car Models</ModalHeader>
             <ModalBody style={{ overflowY: "scroll" }}>
               <ListGroup style={{ maxHeight: "50vh" }}>
-                {productsToAdd?.map(product => (
+                {/* {console.log('carmodels to add ', collectionCarModelIds)} */}
+                {carModelsToAdd?.map(carModel => (
                   <ListGroupItem
                     onClick={() => {
-                      setCollectionProductIds([
-                        ...collectionProductIds,
-                        product._id,
+                      setCollectionCarModelIds([
+                        ...collectionCarModelIds,
+                        carModel._id,
                       ]);
                     }}
-                    key={product._id}
+                    key={carModel._id}
                     style={{ cursor: "pointer" }}
                   >
                     <div className="d-flex">
                       <div>
+                        {/* {console.log('url ', carModel.media.url)} */}
                         <img
                           style={{ maxWidth: "10vh" }}
                           src={
-                            product.media[0] && product.media[0].url
-                              ? product.media[0].url
+                            carModel.media && carModel.media.url
+                              ? carModel.media.url
                               : "/default-image.jpg"
                           }
                         />
                       </div>
                       <div className="w-100 mx-3 m-2">
                         <div style={{ fontWeight: 500, fontSize: "16px" }}>
-                          {product.name}
+                          {carModel.modelName}
                         </div>
-                        <div className="mt-1">
+                        {/* <div className="mt-1">
                           {product.productItemsSummary?.productItemsCount}{" "}
                           item(s) available,{" "}
                           {
@@ -543,16 +546,16 @@ export default function EcommerceCollectionDetails() {
                               ?.inStockProductItemsCount
                           }{" "}
                           in stock
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </ListGroupItem>
                 ))}
               </ListGroup>
-              {productsToAdd?.length ? null : (
+              {carModelsToAdd?.length ? null : (
                 <Row>
                   <Col className="text-sm-center">
-                    This category includes all of the available products.
+                    This category includes all of the available car models.
                   </Col>
                 </Row>
               )}

@@ -1,54 +1,54 @@
 import { takeEvery, put, call } from "redux-saga/effects"
 
 // Calender Redux States
-import { ADD_NEW_CAR_BRAND, DELETE_ALL_CAR_BRAND, DELETE_CAR_BRAND, GET_CAR_BRANDS, GET_COUNTRIES_LIST, GET_COUNTRIES_LIST_SUCCESS, UPDATE_CAR_BRAND } from "./actionTypes"
-import { addCarBrandFail, addCarBrandSuccess, deleteAllCarBrandsFail, deleteAllCarBrandsSuccess, deleteCarBrand, deleteCarBrandFail, deleteCarBrandSuccess, getCarBrandsFail, getCarBrandsSuccess, getCountriesListError, getCountriesListSuccess, updateCarBrand, updateCarBrandFail, updateCarBrandSuccess } from "./actions"
-import { addCarBrand, deleteAllCarBrands, deleteCarBrandData, fetchCountriesListData, getCarBrandsList, updateCarBrandData } from "helpers/automobile_helper_apis"
+import { ADD_NEW_CAR_MODEL, DELETE_ALL_CAR_MODEL, DELETE_CAR_MODEL, GET_CAR_MODELS, GET_COUNTRIES_LIST, GET_COUNTRIES_LIST_SUCCESS, UPDATE_CAR_MODEL } from "./actionTypes"
+import { addCarModelFail, addCarModelSuccess, deleteAllCarModelsFail, deleteAllCarModelsSuccess, deleteCarModel, deleteCarModelFail, deleteCarModelSuccess, getCarModelsFail, getCarModelsSuccess, getCountriesListError, getCountriesListSuccess, updateCarModel, updateCarModelFail, updateCarModelSuccess } from "./actions"
+import { addCarModel, deleteAllCarModels, deleteCarModelData, fetchCountriesListData, getCarModelsList, updateCarModelData } from "helpers/automobile_helper_apis"
 
 
-function* fetchCarBrands() {
+function* fetchCarModels() {
   try {
-    const response = yield call(getCarBrandsList)
-    yield put(getCarBrandsSuccess(response.data.carBrandsList))
+    const response = yield call(getCarModelsList)
+    yield put(getCarModelsSuccess(response.data.carModelsList))
   } catch (error) {
-    yield put(getCarBrandsFail(error))
+    yield put(getCarModelsFail(error))
   }
 }
 
-function* onAddCarBrand({ payload: data }) {
+function* onAddCarModel({ payload: {id , data } }) {
   try {
-    const response = yield call(addCarBrand, data)
-    yield put(addCarBrandSuccess(response.data))
+    const response = yield call(addCarModel, id, data)
+    yield put(addCarModelSuccess(response.data))
   } catch (error) {
-    yield put(addCarBrandFail(error))
+    yield put(addCarModelFail(error))
   }
 }
 
-function* onUpdateCarBrand({ payload: { id, data } }) {
+function* onUpdateCarModel({ payload: { carModelId, id, data } }) {
   try {
-    const response = yield call(updateCarBrandData, id, data )
-    yield put(updateCarBrandSuccess(id))
+    const response = yield call(updateCarModelData, carModelId, id, data )
+    yield put(updateCarModelSuccess(id))
   } catch (error) {
-    yield put(updateCarBrandFail(error))
+    yield put(updateCarModelFail(error))
   }
 }
 
-function* onDeleteCarBrand({ payload: carBrand  }) {
+function* onDeleteCarModel({ payload: carModel  }) {
   try {
-    const response = yield call(deleteCarBrandData, carBrand._id );
+    const response = yield call(deleteCarModelData, carModel._id );
     console.log('response ', response);
-    yield put(deleteCarBrandSuccess(carBrand))
+    yield put(deleteCarModelSuccess(carModel))
   } catch (error) {
-    yield put(deleteCarBrandFail(error))
+    yield put(deleteCarModelFail(error))
   }
 }
 
-function* onDeleteAllCarBrand() {
+function* onDeleteAllCarModel() {
     try {
-      const response = yield call(deleteAllCarBrands)
-      yield put(deleteAllCarBrandsSuccess(response))
+      const response = yield call(deleteAllCarModels)
+      yield put(deleteAllCarModelsSuccess(response))
     } catch (error) {
-      yield put(deleteAllCarBrandsFail(error))
+      yield put(deleteAllCarModelsFail(error))
     }
   }
 
@@ -61,13 +61,13 @@ function* onDeleteAllCarBrand() {
     }
   }
 
-function* carBrandSaga() {
-  yield takeEvery(GET_CAR_BRANDS, fetchCarBrands);
-  yield takeEvery(ADD_NEW_CAR_BRAND, onAddCarBrand);
-  yield takeEvery(UPDATE_CAR_BRAND, onUpdateCarBrand);
-  yield takeEvery(DELETE_CAR_BRAND, onDeleteCarBrand);
-  yield takeEvery(DELETE_ALL_CAR_BRAND, onDeleteAllCarBrand);
+function* carModelSaga() {
+  yield takeEvery(GET_CAR_MODELS, fetchCarModels);
+  yield takeEvery(ADD_NEW_CAR_MODEL, onAddCarModel);
+  yield takeEvery(UPDATE_CAR_MODEL, onUpdateCarModel);
+  yield takeEvery(DELETE_CAR_MODEL, onDeleteCarModel);
+  yield takeEvery(DELETE_ALL_CAR_MODEL, onDeleteAllCarModel);
   yield takeEvery(GET_COUNTRIES_LIST, fetchCountriesList);
 }
 
-export default carBrandSaga;
+export default carModelSaga;

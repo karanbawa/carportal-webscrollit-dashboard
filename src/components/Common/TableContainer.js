@@ -67,6 +67,7 @@ const TableContainer = ({
   isJobListGlobalFilter,
   isAddOptions,
   isAddCarBrandOptions,
+  isAddCarModelOptions,
   isProductListAddOptions, 
   handleDownloadTemplate,
   handleExportCustomers,
@@ -77,6 +78,11 @@ const TableContainer = ({
   handleOrderDeleteClicks,
   handleAddCarBrandClicks,
   handleCarBrandDeleteClicks,
+  handleAddCarModelClicks,
+  handleCarModelDeleteClicks,
+  isAddcarVariantOptions,
+  handleAddcarVariantClicks,
+  handlecarVariantDeleteClicks,
   handleUserClick,
   handleCustomerClick,
   handleProductListClicks,
@@ -213,6 +219,62 @@ const TableContainer = ({
               >
                 <i className="mdi mdi-plus me-1" />
                 Delete all Car Brands
+              </Button>
+            </div>
+            {/* </div> */}
+          </Col>
+        )}
+        {isAddCarModelOptions && (
+          <Col sm="7" className="d-flex justify-content-end">
+            {/* <div className="text-sm-end"> */}
+            <div className="text-sm-end">
+              <Button
+                type="button"
+                color="success"
+                className="btn-rounded  mb-2 me-2"
+                onClick={handleAddCarModelClicks}
+              >
+                <i className="mdi mdi-plus me-1" />
+                Add New Car Model
+              </Button>
+            </div>
+            <div className="text-sm-end">
+              <Button
+                type="button"
+                color="danger"
+                className="btn-rounded  mb-2 me-2"
+                onClick={handleCarModelDeleteClicks}
+              >
+                <i className="mdi mdi-plus me-1" />
+                Delete all Car Models
+              </Button>
+            </div>
+            {/* </div> */}
+          </Col>
+        )}
+        {isAddcarVariantOptions && (
+          <Col sm="7" className="d-flex justify-content-end">
+            {/* <div className="text-sm-end"> */}
+            <div className="text-sm-end">
+              <Button
+                type="button"
+                color="success"
+                className="btn-rounded  mb-2 me-2"
+                onClick={handleAddcarVariantClicks}
+              >
+                <i className="mdi mdi-plus me-1" />
+                Add New Car Variant
+              </Button>
+            </div>
+            <div className="text-sm-end">
+              <Button
+                type="button"
+                color="danger"
+                className="btn-rounded  mb-2 me-2"
+                onClick={handlecarVariantDeleteClicks}
+              >
+                <i className="mdi mdi-plus me-1" />
+                Delete all Car Variants
               </Button>
             </div>
             {/* </div> */}

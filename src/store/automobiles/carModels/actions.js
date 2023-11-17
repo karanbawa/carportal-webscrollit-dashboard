@@ -1,74 +1,74 @@
-import { ADD_CAR_BRAND_FAIL, ADD_CAR_BRAND_SUCCESS, ADD_NEW_CAR_BRAND, DELETE_ALL_CAR_BRAND, DELETE_ALL_CAR_BRAND_FAIL, DELETE_ALL_CAR_BRAND_SUCCESS, DELETE_CAR_BRAND, DELETE_CAR_BRAND_FAIL, DELETE_CAR_BRAND_SUCCESS, GET_CAR_BRANDS, GET_CAR_BRANDS_FAIL, GET_CAR_BRANDS_SUCCESS, GET_COUNTRIES_LIST, GET_COUNTRIES_LIST_ERROR, GET_COUNTRIES_LIST_SUCCESS, UPDATE_CAR_BRAND, UPDATE_CAR_BRAND_FAIL, UPDATE_CAR_BRAND_SUCCESS } from "./actionTypes";
+import { ADD_CAR_MODEL_FAIL, ADD_CAR_MODEL_SUCCESS, ADD_NEW_CAR_MODEL, DELETE_ALL_CAR_MODEL, DELETE_ALL_CAR_MODEL_FAIL, DELETE_ALL_CAR_MODEL_SUCCESS, DELETE_CAR_MODEL, DELETE_CAR_MODEL_FAIL, DELETE_CAR_MODEL_SUCCESS, GET_CAR_MODELS, GET_CAR_MODELS_FAIL, GET_CAR_MODELS_SUCCESS, GET_COUNTRIES_LIST, GET_COUNTRIES_LIST_ERROR, GET_COUNTRIES_LIST_SUCCESS, UPDATE_CAR_MODEL, UPDATE_CAR_MODEL_FAIL, UPDATE_CAR_MODEL_SUCCESS } from "./actionTypes";
   
-  export const getCarBrands = () => ({
-    type: GET_CAR_BRANDS,
+  export const getCarModels = () => ({
+    type: GET_CAR_MODELS,
   });
   
-  export const getCarBrandsSuccess = carBrands => ({
-    type: GET_CAR_BRANDS_SUCCESS,
-    payload: carBrands,
+  export const getCarModelsSuccess = carModels => ({
+    type: GET_CAR_MODELS_SUCCESS,
+    payload: carModels,
   });
   
-  export const getCarBrandsFail = error => ({
-    type: GET_CAR_BRANDS_FAIL,
+  export const getCarModelsFail = error => ({
+    type: GET_CAR_MODELS_FAIL,
     payload: error,
   });
   
-  export const addNewCarBrand = data => ({
-    type: ADD_NEW_CAR_BRAND,
-    payload: data,
+  export const addNewCarModel = (id, data) => ({
+    type: ADD_NEW_CAR_MODEL,
+    payload: {id, data },
   });
   
-  export const addCarBrandSuccess = event => ({
-    type: ADD_CAR_BRAND_SUCCESS,
+  export const addCarModelSuccess = event => ({
+    type: ADD_CAR_MODEL_SUCCESS,
     payload: event,
   });
   
-  export const addCarBrandFail = error => ({
-    type: ADD_CAR_BRAND_FAIL,
+  export const addCarModelFail = error => ({
+    type: ADD_CAR_MODEL_FAIL,
     payload: error,
   });
   
-  export const updateCarBrand = (id, data) => ({
-    type: UPDATE_CAR_BRAND,
-    payload: { id, data },
+  export const updateCarModel = (carModelId, id, data) => ({
+    type: UPDATE_CAR_MODEL,
+    payload: { carModelId, id, data },
   });
   
-  export const updateCarBrandSuccess = id => ({
-    type: UPDATE_CAR_BRAND_SUCCESS,
+  export const updateCarModelSuccess = id => ({
+    type: UPDATE_CAR_MODEL_SUCCESS,
     payload: id,
   });
   
-  export const updateCarBrandFail = error => ({
-    type: UPDATE_CAR_BRAND_FAIL,
+  export const updateCarModelFail = error => ({
+    type: UPDATE_CAR_MODEL_FAIL,
     payload: error,
   });
   
-  export const deleteCarBrand = carBrand => ({
-    type: DELETE_CAR_BRAND,
-    payload: carBrand,
+  export const deleteCarModel = carModel => ({
+    type: DELETE_CAR_MODEL,
+    payload: carModel,
   });
   
-  export const deleteCarBrandSuccess = carBrand => ({
-    type: DELETE_CAR_BRAND_SUCCESS,
-    payload: carBrand,
+  export const deleteCarModelSuccess = carModel => ({
+    type: DELETE_CAR_MODEL_SUCCESS,
+    payload: carModel,
   });
   
-  export const deleteCarBrandFail = error => ({
-    type: DELETE_CAR_BRAND_FAIL,
+  export const deleteCarModelFail = error => ({
+    type: DELETE_CAR_MODEL_FAIL,
     payload: error,
   });
 
-  export const deleteAllCarBrands = () => ({
-    type: DELETE_ALL_CAR_BRAND,
+  export const deleteAllCarModels = () => ({
+    type: DELETE_ALL_CAR_MODEL,
   });
   
-  export const deleteAllCarBrandsSuccess = () => ({
-    type: DELETE_ALL_CAR_BRAND_SUCCESS,
+  export const deleteAllCarModelsSuccess = () => ({
+    type: DELETE_ALL_CAR_MODEL_SUCCESS,
   });
   
-  export const deleteAllCarBrandsFail = error => ({
-    type: DELETE_ALL_CAR_BRAND_FAIL,
+  export const deleteAllCarModelsFail = error => ({
+    type: DELETE_ALL_CAR_MODEL_FAIL,
     payload: error,
   });
 

@@ -24,6 +24,8 @@ import dashboardJobSaga from "./dashboard-jobs/saga";
 import collectionSaga from "./collections/saga";
 import domainSaga from "./domain/saga";
 import carBrandSaga from "./automobiles/carbrands/saga";
+import carModelSaga from "./automobiles/carModels/saga";
+import carVariantSaga from "./automobiles/carVariants/saga";
 
 export default function* rootSaga() {
   yield all([
@@ -50,6 +52,8 @@ export default function* rootSaga() {
     fork(dashboardBlogSaga),
     fork(dashboardJobSaga),
     fork(domainSaga),
-    fork(carBrandSaga)
+    fork(carBrandSaga),
+    fork(carModelSaga),
+    fork(carVariantSaga),
   ]);
 }

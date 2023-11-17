@@ -3,17 +3,21 @@ import { Link } from 'react-router-dom';
 import * as moment from "moment";
 import { Badge } from 'reactstrap';
 
-const BrandId = (cell) => {
+const ModelId = (cell) => {
     return (
         <Link to="#" className="text-body fw-bold">{cell.value ? cell.value : ''}</Link>
     );
 };
 
-const BrandName = (cell) => {
+const ModelName = (cell) => {
     return cell.value ? cell.value : '';
 };
 
-const CountryOfOrigin = (cell) => {
+const CarBrand = (cell) => {
+    return cell.value ? cell.value : '';
+};
+
+const Year = (cell) => {
     return cell.value ? cell.value : '';
 };
 
@@ -26,9 +30,10 @@ const Status = (cell) => {
 };
 
 export {
-    BrandId,
-    BrandName,
-    CountryOfOrigin,
+    ModelId,
+    ModelName,
+    CarBrand,
+    Year,
     TotalCars,
     Status
 };

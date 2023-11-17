@@ -307,7 +307,7 @@ function CarBrands() {
       />
       <div className="page-content">
         <div className="container-fluid">
-          <Breadcrumbs title="Ecommerce" breadcrumbItem="Brands" />
+          <Breadcrumbs title="Ecommerce" breadcrumbItem="Car Brands" />
           <Row>
             <Col xs="12">
               <Card>

@@ -1,70 +1,70 @@
-import { ADD_CAR_BRAND_FAIL, ADD_CAR_BRAND_SUCCESS, DELETE_ALL_CAR_BRAND_SUCCESS, DELETE_CAR_BRAND_FAIL, DELETE_CAR_BRAND_SUCCESS, GET_CAR_BRANDS, GET_CAR_BRANDS_FAIL, GET_CAR_BRANDS_SUCCESS, GET_COUNTRIES_LIST, GET_COUNTRIES_LIST_ERROR, GET_COUNTRIES_LIST_SUCCESS, UPDATE_CAR_BRAND_FAIL, UPDATE_CAR_BRAND_SUCCESS } from "./actionTypes";
+import { ADD_CAR_MODEL_FAIL, ADD_CAR_MODEL_SUCCESS, DELETE_ALL_CAR_MODEL_SUCCESS, DELETE_CAR_MODEL_FAIL, DELETE_CAR_MODEL_SUCCESS, GET_CAR_MODELS, GET_CAR_MODELS_FAIL, GET_CAR_MODELS_SUCCESS, GET_COUNTRIES_LIST, GET_COUNTRIES_LIST_ERROR, GET_COUNTRIES_LIST_SUCCESS, UPDATE_CAR_MODEL_FAIL, UPDATE_CAR_MODEL_SUCCESS } from "./actionTypes";
 
 const INIT_STATE = {
-    carBrands: [],
+    carModels: [],
     countries: [],
     error: {},
 };
 
-const CarBrand = (state = INIT_STATE, action) => {
+const carModel = (state = INIT_STATE, action) => {
     switch (action.type) {
-        case GET_CAR_BRANDS_SUCCESS:
+        case GET_CAR_MODELS_SUCCESS:
             return {
                 ...state,
-                carBrands: action.payload,
+                carModels: action.payload,
             };
 
-        case GET_CAR_BRANDS_FAIL:
+        case GET_CAR_MODELS_FAIL:
             return {
                 ...state,
                 error: action.payload,
             };
 
-        case ADD_CAR_BRAND_SUCCESS:
+        case ADD_CAR_MODEL_SUCCESS:
             return {
                 ...state,
-                carBrands: [...state.carBrands, action.payload.carBrand],
+                carModels: [...state.carModels, action.payload.carModel],
             };
 
-        case ADD_CAR_BRAND_FAIL:
+        case ADD_CAR_MODEL_FAIL:
             return {
                 ...state,
                 error: action.payload,
             };
 
-        case UPDATE_CAR_BRAND_SUCCESS:
+        case UPDATE_CAR_MODEL_SUCCESS:
             return {
                 ...state,
-                carBrands: state.carBrands.map(carBrand =>
-                    carBrand.id.toString() === action.payload.id.toString()
-                        ? { carBrand, ...action.payload }
+                carModels: state.carModels.map(carModel =>
+                    carModel.id.toString() === action.payload.id.toString()
+                        ? { carModel, ...action.payload }
                         : event
                 ),
             };
 
-        case UPDATE_CAR_BRAND_FAIL:
+        case UPDATE_CAR_MODEL_FAIL:
             return {
                 ...state,
                 error: action.payload,
             };
 
-        case DELETE_CAR_BRAND_SUCCESS:
+        case DELETE_CAR_MODEL_SUCCESS:
             return {
                 ...state,
-                carBrands: state.carBrands.filter(
-                    carBrand => carBrand._id.toString() !== action.payload._id.toString()
+                carModels: state.carModels.filter(
+                    carModel => carModel._id.toString() !== action.payload._id.toString()
                 ),
             };
 
-        case DELETE_CAR_BRAND_FAIL:
+        case DELETE_CAR_MODEL_FAIL:
             return {
                 ...state,
                 error: action.payload,
             };
-        case DELETE_ALL_CAR_BRAND_SUCCESS:
+        case DELETE_ALL_CAR_MODEL_SUCCESS:
             return {
                 ...state,
-                carBrands: []
+                carModels: []
             }
         case GET_COUNTRIES_LIST_SUCCESS:
             return {
@@ -76,4 +76,4 @@ const CarBrand = (state = INIT_STATE, action) => {
     }
 };
 
-export default CarBrand;
+export default carModel;

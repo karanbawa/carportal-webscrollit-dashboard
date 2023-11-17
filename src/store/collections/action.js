@@ -27,9 +27,9 @@ export const getCollections = () => ({
     payload: error,
   });
   
-  export const addCollection = (collection, history) => ({
+  export const addCollection = (collection, history, url) => ({
     type: ADD_COLLECTION,
-    payload: { collection, history },
+    payload: { collection, history, url },
   });
   
   export const addCollectionSuccess = collection => ({
@@ -42,9 +42,9 @@ export const getCollections = () => ({
     payload: error,
   });
   
-  export const updateCollection = (collection, history) => ({
+  export const updateCollection = (collection, history, url) => ({
     type: UPDATE_COLLECTION,
-    payload: { collection, history },
+    payload: { collection, history, url },
   });
   
   export const updateCollectionSuccess = collection => ({
