@@ -19,6 +19,7 @@ import {
     CardTitle,
     CardSubtitle,
     FormFeedback,
+    Button,
 } from "reactstrap"
 import Select from "react-select"
 import { Link } from "react-router-dom"
@@ -105,7 +106,7 @@ const orderSummary = [
     { id: 2, img: img7, productTitle: "Wireless Headphone", price: 225, qty: 1 },
 ]
 
-const EngineAndTransmissionVariant = () => {
+const EngineAndTransmissionVariant = ({ onFormSubmit }) => {
 
     //meta title
     document.title = "Add Car Variant | Scrollit";
@@ -124,6 +125,7 @@ const EngineAndTransmissionVariant = () => {
         enableReinitialize: true,
 
         initialValues: {
+            engineType: (carVariant && carVariant.engineAndTransmission && carVariant.engineAndTransmission.engineType) || "",
             displacement: (carVariant && carVariant.engineAndTransmission && carVariant.engineAndTransmission.displacement) || "",
             noOfCylinders: (carVariant && carVariant.engineAndTransmission && carVariant.engineAndTransmission.noOfCylinders) || "",
             maxPower: (carVariant && carVariant.engineAndTransmission && carVariant.engineAndTransmission.maxPower) || "",
@@ -142,43 +144,47 @@ const EngineAndTransmissionVariant = () => {
             // year: (carModel && carModel.year) || "",
             // status: (carModel && carModel.status ? 'Active' : 'InActive') || "",
         },
-        validationSchema: Yup.object({
-            modelName: Yup.string().required(
-                "Please Enter Your Brand Name"
-            ),
-            carBrand: Yup.string().required(
-                "Please Enter Your CarBrand"
-            ),
-            description: Yup.string().required(
-                "Please Enter Your description"
-            ),
-            year: Yup.string().required(
-                "Please Enter Your Year"
-            ),
-            status: Yup.string().required(
-                "Please Enter Your Status"
-            )
-        }),
+        // validationSchema: Yup.object({
+        //     modelName: Yup.string().required(
+        //         "Please Enter Your Brand Name"
+        //     ),
+        //     carBrand: Yup.string().required(
+        //         "Please Enter Your CarBrand"
+        //     ),
+        //     description: Yup.string().required(
+        //         "Please Enter Your description"
+        //     ),
+        //     year: Yup.string().required(
+        //         "Please Enter Your Year"
+        //     ),
+        //     status: Yup.string().required(
+        //         "Please Enter Your Status"
+        //     )
+        // }),
         onSubmit: values => {
-            if (isEdit) {
-                const updCarModel = new FormData();
-                updCarModel.append("modelName", values["modelName"]);
-                updCarModel.append("description", values["description"]);
-                updCarModel.append("year", values["year"]);
-                updCarModel.append("status", values["status"] === 'Active' ? true : false);
-                updCarModel.append("image", modelImage ? modelImage : "broken!");
-                dispatch(updateCarModel(carModel._id, values['carBrand'], updCarModel));
+            // if (isEdit) {
+            //     const updCarModel = new FormData();
+            //     updCarModel.append("modelName", values["modelName"]);
+            //     updCarModel.append("description", values["description"]);
+            //     updCarModel.append("year", values["year"]);
+            //     updCarModel.append("status", values["status"] === 'Active' ? true : false);
+            //     updCarModel.append("image", modelImage ? modelImage : "broken!");
+            //     dispatch(updateCarModel(carModel._id, values['carBrand'], updCarModel));
 
-                validation.resetForm();
-            } else {
-                const newCarModel = new FormData();
-                newCarModel.append("modelName", values["modelName"]);
-                newCarModel.append("description", values["description"]);
-                newCarModel.append("year", values["year"]);
-                newCarModel.append("status", values["status"] === 'Active' ? true : false);
-                newCarModel.append("image", modelImage ? modelImage : "broken!");
-                dispatch(addNewCarModel(values['carBrand'], newCarModel));
-                validation.resetForm();
+            //     validation.resetForm();
+            // } else {
+            //     const newCarModel = new FormData();
+            //     newCarModel.append("modelName", values["modelName"]);
+            //     newCarModel.append("description", values["description"]);
+            //     newCarModel.append("year", values["year"]);
+            //     newCarModel.append("status", values["status"] === 'Active' ? true : false);
+            //     newCarModel.append("image", modelImage ? modelImage : "broken!");
+            //     dispatch(addNewCarModel(values['carBrand'], newCarModel));
+            //     validation.resetForm();
+            // }
+            console.log('values ', values);
+            if (onFormSubmit) {
+                onFormSubmit(values);
             }
             toggle();
         },
@@ -211,7 +217,7 @@ const EngineAndTransmissionVariant = () => {
                                                     <p className="card-title-desc">
                                                         Fill all information below
                                                     </p>
-                                                    <Form>
+                                                    <Form onSubmit={validation.handleSubmit}>
                                                         <FormGroup className="mb-4" row>
                                                             <Label
                                                                 htmlFor="engineType"
@@ -295,6 +301,28 @@ const EngineAndTransmissionVariant = () => {
                                                                     onChange={validation.handleChange}
                                                                     onBlur={validation.handleBlur}
                                                                     value={validation.values.maxPower}
+                                                                />
+                                                            </Col>
+                                                        </FormGroup>
+
+                                                        <FormGroup className="mb-4" row>
+                                                            <Label
+                                                                htmlFor="maxPower"
+                                                                md="2"
+                                                                className="col-form-label"
+                                                            >
+                                                                Max Power <span style={{ color: 'red' }}>*</span>
+                                                            </Label>
+                                                            <Col md="10">
+                                                                <Input
+                                                                    type="text"
+                                                                    className="form-control"
+                                                                    name="maxTorque"
+                                                                    id="maxTorque"
+                                                                    placeholder="Enter your MaxTorque"
+                                                                    onChange={validation.handleChange}
+                                                                    onBlur={validation.handleBlur}
+                                                                    value={validation.values.maxTorque}
                                                                 />
                                                             </Col>
                                                         </FormGroup>
@@ -496,12 +524,14 @@ const EngineAndTransmissionVariant = () => {
                                                                 />
                                                             </Col>
                                                         </FormGroup>
+
+                                                        <Button type="submit" color="primary">Next</Button>
                                                     </Form>
                                                
                                         
-                                   
+                                                   
                             
-                                <Row className="mt-4">
+                                {/* <Row className="mt-4">
                                     <Col sm="6">
                                         <Link
                                             to="/ecommerce-cart"
@@ -522,7 +552,7 @@ const EngineAndTransmissionVariant = () => {
                                             </Link>
                                         </div>
                                     </Col>
-                                </Row>
+                                </Row> */}
                             
                        
                     </div>
